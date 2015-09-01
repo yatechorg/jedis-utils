@@ -1,0 +1,86 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'idea'
+apply plugin: 'project-report'
+
+sourceCompatibility = 1.7
+version = '1.0'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.3.1'
+    }
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'redis.clients:jedis:2.7.0'
+
+    testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
+    testCompile 'org.objenesis:objenesis:2.1'
+}
+
+apply plugin: 'com.jfrog.bintray'
+
+group = groupId
+version = versionId
+
+jar {
+    manifest {
+        def jarVersion = versionId
+        attributes 'Specification-Title': jarTitle, 'Specification-Version': jarVersion, 'Specification-Vendor': jarVendor
+        attributes 'Implementation-Title': jarTitle, 'Implementation-Version': jarVersion, 'Implementation-Vendor': jarVendor
+    }
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+def bintrayVersion = versionId
+
+bintray {
+    user = bintrayUser
+    key = bintrayApiKey
+
+    configurations = ['archives']
+    dryRun = true //Whether to run this as dry-run, without deploying
+    publish = false //If version should be auto published after an upload
+    pkg {
+        repo = bintrayRepo
+        name = bintrayPackage
+        desc = 'Utilities for common tasks using Jedis (Java Redis client)'
+        websiteUrl = githubUrl
+        issueTrackerUrl = "${githubUrl}/issues"
+        vcsUrl = "${githubUrl}.git"
+        licenses = ['MIT']
+        labels = ['jedis', 'redis', 'lua']
+        publicDownloadNumbers = true
+        //Optional version descriptor
+        version {
+            name = bintrayVersion
+            vcsTag = "v${bintrayVersion}"
+        }
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.6' //version required
+}
