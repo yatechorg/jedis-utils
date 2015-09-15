@@ -72,8 +72,8 @@ publishing {
     }
 }
 
-def bintrayUser = System.properties.BINTRAY_USER
-def bintrayApiKey = System.properties.BINTRAY_API_KEY
+def bintrayUser = System.properties.BINTRAY_USER ?: System.env.BINTRAY_USER
+def bintrayApiKey = System.properties.BINTRAY_API_KEY ?: System.env.BINTRAY_API_KEY
 
 def bintrayVersion = versionId
 
