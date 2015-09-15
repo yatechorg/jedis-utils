@@ -114,6 +114,7 @@ artifactory {
             username = "${artifactory_user}"
             password = "${artifactory_password}"
             maven = true
+            println "artifactory: user='$artifactory_user', password='${artifactory_password.substring(0,4)}${def s = ''; for (int i=4; i < artifactory_password.length()-4; i++) s += '*'; s}${artifactory_password.substring(artifactory_password.length()-4)}'"
         }
         defaults {
             publications('mavenJava')
