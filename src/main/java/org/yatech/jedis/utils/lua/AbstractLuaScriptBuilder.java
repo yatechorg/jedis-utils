@@ -1,6 +1,7 @@
 package org.yatech.jedis.utils.lua;
 
 import org.yatech.jedis.utils.lua.ast.*;
+import static org.yatech.jedis.utils.lua.ast.LuaAstHelper.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,37 +30,15 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
         script.getStatements().add(statement);
     }
 
-    private LuaAstFunctionCallStatement redisCallStatement(String methodName, List<LuaAstExpression> arguments) {
-        return new LuaAstFunctionCallStatement(redisCall(methodName, arguments));
-    }
+    // *** Ast helper methods
 
-    private LuaAstRedisCall redisCall(String methodName, List<LuaAstExpression> arguments) {
-        return new LuaAstRedisCall(methodName, arguments);
-    }
-
-    private List<LuaAstExpression> arguments(LuaAstExpression... args) {
-        return Arrays.asList(args);
-    }
-
-    private LuaAstAssignmentStatement assignment(LuaAstLocalDeclaration local, LuaAstExpression expression) {
-        return new LuaAstAssignmentStatement(local, expression);
-    }
-
-    private LuaAstStringValue stringValue(String key) {
-        return new LuaAstStringValue(key);
-    }
-
-    private LuaAstDoubleValue doubleValue(double score) {
-        return new LuaAstDoubleValue(score);
-    }
-
-    private LuaAstLocalDeclaration localDeclaration() {
+    private LuaAstLocalDeclaration declareNewLocal() {
         String name = getNextLocalName();
-        return new LuaAstLocalDeclaration(name);
+        return declareLocal(name);
     }
 
-    private LuaAstUnpack unpack(LuaLocalArray hash) {
-        return new LuaAstUnpack(new LuaAstLocal(hash.getName()));
+    private LuaAstUnpack unpackArray(LuaLocalArray hash) {
+        return unpack(hash.getName());
     }
 
     // *** Arguments ***
@@ -103,7 +82,7 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
 
     @Override
     public LuaLocalArray hgetAll(String key) {
-        LuaAstLocalDeclaration local = localDeclaration();
+        LuaAstLocalDeclaration local = declareNewLocal();
         add(assignment(local, redisCall("HGETALL", arguments(stringValue(key)))));
         return new LuaLocalArray(local.getName());
     }
@@ -115,7 +94,7 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
 
     @Override
     public LuaLocalArray hgetAll(LuaKeyArgument key) {
-        LuaAstLocalDeclaration local = localDeclaration();
+        LuaAstLocalDeclaration local = declareNewLocal();
         LuaAstArg keyArg = getOrCreateKeyArgument(key);
         add(assignment(local, redisCall("HGETALL", arguments(keyArg))));
         return new LuaLocalArray(local.getName());
@@ -123,7 +102,7 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
 
     @Override
     public LuaLocalValue zscore(String key, String member) {
-        LuaAstLocalDeclaration local = localDeclaration();
+        LuaAstLocalDeclaration local = declareNewLocal();
         add(assignment(local, redisCall("ZSCORE", arguments(stringValue(key), stringValue(member)))));
         return new LuaLocalValue(local.getName());
     }
@@ -165,7 +144,7 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
 
     @Override
     public LuaLocalValue zscore(LuaKeyArgument key, LuaStringValueArgument member) {
-        LuaAstLocalDeclaration local = localDeclaration();
+        LuaAstLocalDeclaration local = declareNewLocal();
         LuaAstArg keyArg = getOrCreateKeyArgument(key);
         LuaAstArg memberArg = getOrCreateArgvArgument(member);
         add(assignment(local, redisCall("ZSCORE", arguments(keyArg, memberArg))));
@@ -359,7 +338,7 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
 
     @Override
     public BuilderType hmset(String key, LuaLocalArray hash) {
-        add(redisCallStatement("HMSET", arguments(stringValue(key), unpack(hash))));
+        add(redisCallStatement("HMSET", arguments(stringValue(key), unpackArray(hash))));
         return thisBuilder();
     }
 
@@ -371,7 +350,7 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
     @Override
     public BuilderType hmset(LuaKeyArgument key, LuaLocalArray hash) {
         LuaAstArg keyArg = getOrCreateKeyArgument(key);
-        add(redisCallStatement("HMSET", arguments(keyArg, unpack(hash))));
+        add(redisCallStatement("HMSET", arguments(keyArg, unpackArray(hash))));
         return thisBuilder();
     }
 
