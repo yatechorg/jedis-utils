@@ -5,10 +5,18 @@ import org.yatech.jedis.utils.lua.ast.LuaAstLocal;
 import org.yatech.jedis.utils.lua.ast.LuaAstNot;
 
 /**
+ * Helper class for creating lua conditions (predicates...)
+ *
  * Created by Yinon Avraham on 11/09/2015.
+ * @see org.yatech.jedis.utils.lua.LuaScriptBuilder#ifCondition(LuaCondition)
  */
 public class LuaConditions {
 
+    /**
+     * NOT NULL predicate
+     * @param value the value for which to check
+     * @return a {@link LuaCondition} instance
+     */
     public static LuaCondition notNull(LuaValue value) {
         LuaAstExpression expression;
         if (value instanceof LuaLocal) {

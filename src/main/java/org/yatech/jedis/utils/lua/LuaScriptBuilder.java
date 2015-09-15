@@ -7,7 +7,12 @@ import org.yatech.jedis.utils.lua.ast.LuaAstStatement;
 import java.util.*;
 
 /**
+ * Builder for a lua script
+ *
  * Created by Yinon Avraham on 11/09/2015.
+ * @see #startScript()
+ * @see #endScript()
+ * @see #endPreparedScript()
  */
 public class LuaScriptBuilder extends AbstractLuaScriptBuilder<LuaScriptBuilder> {
 
@@ -63,6 +68,10 @@ public class LuaScriptBuilder extends AbstractLuaScriptBuilder<LuaScriptBuilder>
         return new LuaScriptBuilder();
     }
 
+    /**
+     * End building the script
+     * @return the new {@link LuaScript} instance
+     */
     public LuaScript endScript() {
         if (!endsWithReturnStatement()) {
             add(new LuaAstReturnStatement());
@@ -76,6 +85,10 @@ public class LuaScriptBuilder extends AbstractLuaScriptBuilder<LuaScriptBuilder>
         return !statements.isEmpty() && statements.get(statements.size()-1) instanceof LuaAstReturnStatement;
     }
 
+    /**
+     * End building the prepared script
+     * @return the new {@link LuaPreparedScript} instance
+     */
     public LuaPreparedScript endPreparedScript() {
         if (!endsWithReturnStatement()) {
             add(new LuaAstReturnStatement());
@@ -94,6 +107,13 @@ public class LuaScriptBuilder extends AbstractLuaScriptBuilder<LuaScriptBuilder>
         return placeholder2ArgMap;
     }
 
+    /**
+     * Start a new script block
+     * @param parentBuilder the {@link LuaScriptBuilder} that the new block belongs to
+     * @return a new builder for the script block
+     * @see org.yatech.jedis.utils.lua.LuaIfStatementBuilder#then(LuaScriptBlock)
+     * @see LuaScriptBlockBuilder#endBlock()
+     */
     public static LuaScriptBlockBuilder startBlock(LuaScriptBuilder parentBuilder) {
         return LuaScriptBlockBuilder.startBlock(parentBuilder);
     }

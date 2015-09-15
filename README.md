@@ -26,7 +26,7 @@ builder.select(1);
 LuaScript script = builder.endScript();
 
 Jedis jedis = ...
-script.execute(jedis);
+script.exec(jedis);
 ```
 
 It is also possible to create prepared scripts with arguments and with some control statements.
@@ -66,5 +66,5 @@ preparedScript.setValueArgument('db1',8)
 preparedScript.setValueArgument('member1','thefirstmember')
 preparedScript.setValueArgument('score',1.234)
 Jedis jedis = ...
-preparedScript.execute(jedis)
+preparedScript.exec(jedis)
 ```

@@ -3,7 +3,11 @@ package org.yatech.jedis.utils.lua;
 import org.yatech.jedis.utils.lua.ast.LuaAstArg;
 
 /**
+ * Builder for a script block
+ *
  * Created by Yinon Avraham on 11/09/2015.
+ * @see org.yatech.jedis.utils.lua.LuaScriptBuilder#startBlock(LuaScriptBuilder)
+ * @see #endBlock()
  */
 public class LuaScriptBlockBuilder extends AbstractLuaScriptBuilder<LuaScriptBlockBuilder> {
 
@@ -33,6 +37,10 @@ public class LuaScriptBlockBuilder extends AbstractLuaScriptBuilder<LuaScriptBlo
         return new LuaScriptBlockBuilder(parentBuilder);
     }
 
+    /**
+     * End the script block
+     * @return the new {@link LuaScriptBlock} instance
+     */
     public LuaScriptBlock endBlock() {
         return new LuaScriptBlock(script);
     }

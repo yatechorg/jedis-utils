@@ -3,8 +3,6 @@ package org.yatech.jedis.utils.lua;
 import org.yatech.jedis.utils.lua.ast.*;
 import static org.yatech.jedis.utils.lua.ast.LuaAstHelper.*;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -43,26 +41,64 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
 
     // *** Arguments ***
 
+    /**
+     * Create a new key argument which is a place holder for keys in a {@link org.yatech.jedis.utils.lua.LuaPreparedScript}.
+     * @param argName the name of the argument
+     * @return the new argument instance
+     * @see org.yatech.jedis.utils.lua.LuaPreparedScript#setKeyArgument(String, String)
+     */
     public static LuaKeyArgument newKeyArgument(String argName) {
         return new LuaKeyArgument(argName);
     }
 
+    /**
+     * Create a new string value argument which is a place holder for string values in a {@link org.yatech.jedis.utils.lua.LuaPreparedScript}.
+     * @param argName the name of the argument
+     * @return the new argument instance
+     * @see org.yatech.jedis.utils.lua.LuaPreparedScript#setValueArgument(String, String)
+     */
     public static LuaStringValueArgument newStringValueArgument(String argName) {
         return new LuaStringValueArgument(argName);
     }
 
+    /**
+     * Create a new int value argument which is a place holder for int values in a {@link org.yatech.jedis.utils.lua.LuaPreparedScript}.
+     * @param argName the name of the argument
+     * @return the new argument instance
+     * @see org.yatech.jedis.utils.lua.LuaPreparedScript#setValueArgument(String, int)
+     */
     public static LuaIntValueArgument newIntValueArgument(String argName) {
         return new LuaIntValueArgument(argName);
     }
 
+    /**
+     * Create a new double value argument which is a place holder for double values in a {@link org.yatech.jedis.utils.lua.LuaPreparedScript}.
+     * @param argName the name of the argument
+     * @return the new argument instance
+     * @see org.yatech.jedis.utils.lua.LuaPreparedScript#setValueArgument(String, double)
+     */
     public static LuaDoubleValueArgument newDoubleValueArgument(String argName) {
         return new LuaDoubleValueArgument(argName);
     }
 
     // *** If condition ***
 
-    public LuaIfConditionBuilder<BuilderType> ifCondition(LuaCondition condition) {
-        return new LuaIfConditionBuilder<BuilderType>(this, condition);
+    /**
+     * Start an <code>if</code> statement. For example:
+     * <pre><code>
+     *     builder.ifCondition(notNull(local1))
+     *         .then(
+     *             startBlock(builder).del("key1").endBlock()
+     *         .endIf()
+     * </code></pre>
+     * @param condition the condition for the statement
+     * @return a builder for the statement
+     * @see org.yatech.jedis.utils.lua.LuaConditions
+     * @see LuaIfStatementBuilder#then(LuaScriptBlock)
+     * @see LuaIfStatementBuilder#endIf()
+     */
+    public LuaIfStatementBuilder<BuilderType> ifCondition(LuaCondition condition) {
+        return new LuaIfStatementBuilder<BuilderType>(this, condition);
     }
 
     // *** Jedis Commands ***

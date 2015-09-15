@@ -5,7 +5,11 @@ import redis.clients.jedis.Jedis;
 import java.util.*;
 
 /**
+ * A prepared script which can have a fixed script with argument placeholders.
+ * The placeholders can be set with concrete values and then the script can be executed without the need to rebuild it.
+ *
  * Created by Yinon Avraham on 11/09/2015.
+ * @see LuaScriptBuilder#endPreparedScript()
  */
 public class LuaPreparedScript extends LuaScript {
 
@@ -28,18 +32,38 @@ public class LuaPreparedScript extends LuaScript {
         return map;
     }
 
+    /**
+     * Set the concrete key name for a key argument
+     * @param name the name of the argument (placeholder)
+     * @param key the concrete key name
+     */
     public void setKeyArgument(String name, String key) {
         name2keyArguments.get(name).setValue(key);
     }
 
+    /**
+     * Set the concrete value for a value argument
+     * @param name the name of the argument (placeholder)
+     * @param value the concrete value
+     */
     public void setValueArgument(String name, String value) {
         name2valueArguments.get(name).setValue(value);
     }
 
+    /**
+     * Set the concrete value for a value argument
+     * @param name the name of the argument (placeholder)
+     * @param value the concrete value
+     */
     public void setValueArgument(String name, int value) {
         name2valueArguments.get(name).setValue(value);
     }
 
+    /**
+     * Set the concrete value for a value argument
+     * @param name the name of the argument (placeholder)
+     * @param value the concrete value
+     */
     public void setValueArgument(String name, double value) {
         name2valueArguments.get(name).setValue(value);
     }
