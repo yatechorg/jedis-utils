@@ -105,6 +105,7 @@ bintray {
 
 artifactory_user = bintrayUser
 artifactory_password = bintrayApiKey
+//println "artifactory: user='$artifactory_user', password='${artifactory_password.substring(0,4)}${def s = ''; for (int i=4; i < artifactory_password.length()-4; i++) s += '*'; s}${artifactory_password.substring(artifactory_password.length()-4)}'"
 
 artifactory {
     contextUrl = "${artifactory_contextUrl}"   //The base Artifactory URL if not overridden by the publisher/resolver
@@ -114,7 +115,6 @@ artifactory {
             username = "${artifactory_user}"
             password = "${artifactory_password}"
             maven = true
-            println "artifactory: user='$artifactory_user', password='${artifactory_password.substring(0,4)}${def s = ''; for (int i=4; i < artifactory_password.length()-4; i++) s += '*'; s}${artifactory_password.substring(artifactory_password.length()-4)}'"
         }
         defaults {
             publications('mavenJava')
