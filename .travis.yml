@@ -7,6 +7,8 @@ jdk:
 
 before_install:
  - chmod +x gradlew
+ - chmod +x .travis-scripts/deploy-artifacts.sh
+ - chmod +x .travis-scripts/push-javadoc-to-gh-pages.sh
 
 after_success:
  - .travis-scripts/deploy-artifacts.sh
