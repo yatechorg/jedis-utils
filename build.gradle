@@ -89,7 +89,7 @@ bintray {
         repo = bintrayRepo
         name = bintrayPackage
         desc = 'Utilities for common tasks using Jedis (Java Redis client)'
-        websiteUrl = githubUrl
+        websiteUrl = githubPagesUrl
         issueTrackerUrl = "${githubUrl}/issues"
         vcsUrl = "${githubUrl}.git"
         licenses = ['MIT']
