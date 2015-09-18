@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/yatechorg/jedis-utils.svg)](https://travis-ci.org/yatechorg/jedis-utils)
+[![Download](https://api.bintray.com/packages/yatech/maven/jedis-utils/images/download.svg)](https://bintray.com/yatech/maven/jedis-utils/_latestVersion)
 
 # jedis-utils
 Utilities for common tasks using [Jedis](https://github.com/xetorthio/jedis) (the java redis client).
