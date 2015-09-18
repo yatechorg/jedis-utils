@@ -82,4 +82,64 @@ class LuaScriptBuilderSpec extends Specification {
                 'return\n'
     }
 
+    def 'argument compatibility'() {
+        given:
+        def keyArg = newKeyArgument('keyArg')
+        def stringArg = newStringValueArgument('stringArg')
+        def doubleArg = newDoubleValueArgument('doubleArg')
+        def intArg = newIntValueArgument('intArg')
+        def localValue1 = new LuaLocalValue('localValue1')
+        def localValue2 = new LuaLocalValue('localValue2')
+        def localValue3 = new LuaLocalValue('localValue3')
+        def localArray = new LuaLocalArray('localArray')
+
+        def builder = startScript()
+
+        when:
+        // --- db ---
+        // select
+        builder.select(intArg)
+
+        // --- keys ---
+        // del
+        builder.del(keyArg)
+        builder.del(localValue1)
+
+        // --- hash ---
+        // hgetAll
+        builder.hgetAll(keyArg)
+        builder.hgetAll(localValue1)
+        // hmset
+        builder.hmset(keyArg, localArray)
+        builder.hmset(localValue1, localArray)
+
+        // --- zset ---
+        // zadd
+        builder.zadd(keyArg, doubleArg, stringArg)
+        builder.zadd(localValue1, localValue2, localValue3)
+        builder.zadd(keyArg, localArray)
+        builder.zadd(localValue1, localArray)
+        // zscore
+        builder.zscore(keyArg, stringArg)
+        builder.zscore(localValue1, localValue2)
+
+        def script = builder.endScript()
+
+        then:
+        script.toString() == 'redis.call("SELECT",ARGV[1])\n' +
+                'redis.call("DEL",KEYS[1])\n' +
+                'redis.call("DEL","localValue1")\n' +
+                'local local0 = redis.call("HGETALL",KEYS[1])\n' +
+                'local local1 = redis.call("HGETALL",localValue1)\n' +
+                'redis.call("HMSET",KEYS[1],unpack(localArray))\n' +
+                'redis.call("HMSET",localValue1,unpack(localArray))\n' +
+                'redis.call("ZADD",KEYS[1],ARGV[2],ARGV[3])\n' +
+                'redis.call("ZADD",localValue1,localValue2,localValue3)\n' +
+                'redis.call("ZADD",KEYS[1],unpack(localArray))\n' +
+                'redis.call("ZADD",localValue1,unpack(localArray))\n' +
+                'local local2 = redis.call("ZSCORE",KEYS[1],ARGV[3])\n' +
+                'local local3 = redis.call("ZSCORE",localValue1,localValue2)\n' +
+                'return\n'
+    }
+
 }

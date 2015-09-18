@@ -38,8 +38,12 @@ public class LuaAstHelper {
         return new LuaAstLocalDeclaration(name);
     }
 
-    public static LuaAstUnpack unpack(String localName) {
-        return new LuaAstUnpack(new LuaAstLocal(localName));
+    public static LuaAstUnpack unpack(LuaAstLocal local) {
+        return new LuaAstUnpack(local);
+    }
+
+    public static LuaAstLocal local(String localName) {
+        return new LuaAstLocal(localName);
     }
 
 
