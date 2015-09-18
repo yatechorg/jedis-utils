@@ -9,4 +9,9 @@ before_install:
  - chmod +x gradlew
 
 after_success:
+ - echo "TRAVIS_PULL_REQUEST = ${TRAVIS_PULL_REQUEST}"
+ - echo "TRAVIS_JDK_VERSION = ${TRAVIS_JDK_VERSION}"
+ - echo "TRAVIS_JDK = ${TRAVIS_JDK}"
+ - echo "JDK_VERSION = ${JDK_VERSION}"
+ - echo "JDK = ${JDK}"
  - test "${TRAVIS_PULL_REQUEST}" == "false" && test “${TRAVIS_JDK_VERSION}” == “oraclejdk7″ && ./gradlew publishSnapshotOrRelease
