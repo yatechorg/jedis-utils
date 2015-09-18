@@ -13,7 +13,7 @@ if [ "$TRAVIS_REPO_SLUG" == "yatechorg/jedis-utils" ] && [ "$TRAVIS_JDK_VERSION"
   git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/yatechorg/jedis-utils gh-pages > /dev/null
 
   cd gh-pages
-  git rm -rf ./javadoc
+  git rm -rf ./javadoc/latest
   cp -Rf $HOME/javadoc-latest ./javadoc/latest
   git add -f .
   git commit -m "Lastest javadoc on successful travis build $TRAVIS_BUILD_NUMBER auto-pushed to gh-pages"
