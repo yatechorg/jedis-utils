@@ -13,11 +13,11 @@ import org.yatech.jedis.utils.lua.ast.LuaAstNot;
 public class LuaConditions {
 
     /**
-     * NOT NULL predicate
+     * IS NULL predicate
      * @param value the value for which to check
      * @return a {@link LuaCondition} instance
      */
-    public static LuaCondition notNull(LuaValue value) {
+    public static LuaCondition isNull(LuaValue value) {
         LuaAstExpression expression;
         if (value instanceof LuaLocal) {
             expression = new LuaAstLocal(((LuaLocal) value).getName());

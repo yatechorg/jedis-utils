@@ -15,7 +15,7 @@ class LuaScriptBuilderSpec extends Specification {
         def payload = builder.hgetAll('key1')
         builder.select(1)
         def existingScore = builder.zscore('key2', 'member1')
-        builder.ifCondition(notNull(existingScore)).then(
+        builder.ifCondition(isNull(existingScore)).then(
                 startBlock(builder)
                 .zadd('key2', 1.2, 'member1')
                 .endBlock())
@@ -55,7 +55,7 @@ class LuaScriptBuilderSpec extends Specification {
         def payload = builder.hgetAll(key1)
         builder.select(db1)
         def existingScore = builder.zscore(key2, member1)
-        builder.ifCondition(notNull(existingScore)).then(
+        builder.ifCondition(isNull(existingScore)).then(
                 startBlock(builder)
                 .zadd(key2, score, member1)
                 .endBlock())

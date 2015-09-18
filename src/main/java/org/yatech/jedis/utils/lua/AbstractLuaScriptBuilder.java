@@ -86,7 +86,7 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
     /**
      * Start an <code>if</code> statement. For example:
      * <pre><code>
-     *     builder.ifCondition(notNull(local1))
+     *     builder.ifCondition(isNull(local1))
      *         .then(
      *             startBlock(builder).del("key1").endBlock()
      *         .endIf()
