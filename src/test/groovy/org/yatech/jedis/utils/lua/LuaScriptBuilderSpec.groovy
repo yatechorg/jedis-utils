@@ -99,6 +99,7 @@ class LuaScriptBuilderSpec extends Specification {
         // --- db ---
         // select
         builder.select(intArg)
+        builder.select(localValue1)
 
         // --- keys ---
         // del
@@ -127,8 +128,9 @@ class LuaScriptBuilderSpec extends Specification {
 
         then:
         script.toString() == 'redis.call("SELECT",ARGV[1])\n' +
+                'redis.call("SELECT",localValue1)\n' +
                 'redis.call("DEL",KEYS[1])\n' +
-                'redis.call("DEL","localValue1")\n' +
+                'redis.call("DEL",localValue1)\n' +
                 'local local0 = redis.call("HGETALL",KEYS[1])\n' +
                 'local local1 = redis.call("HGETALL",localValue1)\n' +
                 'redis.call("HMSET",KEYS[1],unpack(localArray))\n' +

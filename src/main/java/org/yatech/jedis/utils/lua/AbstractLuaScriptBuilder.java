@@ -39,6 +39,20 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
         return unpack(local(hash.getName()));
     }
 
+    private <T> LuaAstExpression argument(LuaValue<T> value) {
+        if (value instanceof LuaLocal) {
+            return local(((LuaLocal) value).getName());
+        } else if (value instanceof LuaKeyArgument) {
+            return getOrCreateKeyArgument((LuaKeyArgument)value);
+        } else if (value instanceof LuaValueArgument) {
+            return getOrCreateArgvArgument((LuaValueArgument) value);
+        } else {
+            throw new IllegalArgumentException(
+                    String.format("LuaValue of specific type $s is not expected.",
+                            value.getClass().getName()));
+        }
+    }
+
     // *** Arguments ***
 
     /**
@@ -110,9 +124,20 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
     }
 
     @Override
-    public BuilderType select(LuaIntValueArgument db) {
-        LuaAstArg dbArg = getOrCreateArgvArgument(db);
-        add(redisCallStatement("SELECT", arguments(dbArg)));
+    public BuilderType select(LuaValue<Integer> db) {
+        add(redisCallStatement("SELECT", arguments(argument(db))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType del(String key) {
+        add(redisCallStatement("DEL", arguments(stringValue(key))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType del(LuaValue<String> key) {
+        add(redisCallStatement("DEL", arguments(argument(key))));
         return thisBuilder();
     }
 
@@ -124,245 +149,10 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
     }
 
     @Override
-    public LuaLocalArray hgetAll(LuaLocalValue key) {
+    public LuaLocalArray hgetAll(LuaValue<String> key) {
         LuaAstLocalDeclaration local = declareNewLocal();
-        add(assignment(local, redisCall("HGETALL", arguments(local(key.getName())))));
+        add(assignment(local, redisCall("HGETALL", arguments(argument(key)))));
         return new LuaLocalArray(local.getName());
-    }
-
-    @Override
-    public LuaLocalArray hgetAll(LuaKeyArgument key) {
-        LuaAstLocalDeclaration local = declareNewLocal();
-        LuaAstArg keyArg = getOrCreateKeyArgument(key);
-        add(assignment(local, redisCall("HGETALL", arguments(keyArg))));
-        return new LuaLocalArray(local.getName());
-    }
-
-    @Override
-    public LuaLocalValue zscore(String key, String member) {
-        LuaAstLocalDeclaration local = declareNewLocal();
-        add(assignment(local, redisCall("ZSCORE", arguments(stringValue(key), stringValue(member)))));
-        return new LuaLocalValue(local.getName());
-    }
-
-    @Override
-    public LuaLocalValue zscore(LuaLocalValue key, String member) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public LuaLocalValue zscore(LuaKeyArgument key, String member) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public LuaLocalValue zscore(String key, LuaLocalValue member) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public LuaLocalValue zscore(String key, LuaStringValueArgument member) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public LuaLocalValue zscore(LuaLocalValue key, LuaLocalValue member) {
-        LuaAstLocalDeclaration local = declareNewLocal();
-        add(assignment(local, redisCall("ZSCORE", arguments(local(key.getName()), local(member.getName())))));
-        return new LuaLocalValue(local.getName());
-    }
-
-    @Override
-    public LuaLocalValue zscore(LuaLocalValue key, LuaStringValueArgument member) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public LuaLocalValue zscore(LuaKeyArgument key, LuaLocalValue member) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public LuaLocalValue zscore(LuaKeyArgument key, LuaStringValueArgument member) {
-        LuaAstLocalDeclaration local = declareNewLocal();
-        LuaAstArg keyArg = getOrCreateKeyArgument(key);
-        LuaAstArg memberArg = getOrCreateArgvArgument(member);
-        add(assignment(local, redisCall("ZSCORE", arguments(keyArg, memberArg))));
-        return new LuaLocalValue(local.getName());
-    }
-
-    @Override
-    public BuilderType zadd(String key, double score, String member) {
-        add(redisCallStatement("ZADD", arguments(stringValue(key), doubleValue(score), stringValue(member))));
-        return thisBuilder();
-    }
-
-    @Override
-    public BuilderType zadd(LuaLocalValue key, double score, String member) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public BuilderType zadd(String key, LuaLocalValue score, String member) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public BuilderType zadd(String key, double score, LuaLocalValue member) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public BuilderType zadd(String key, double score, LuaStringValueArgument member) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public BuilderType zadd(LuaLocalValue key, LuaLocalValue score, String member) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public BuilderType zadd(LuaLocalValue key, double score, LuaLocalValue member) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public BuilderType zadd(LuaLocalValue key, double score, LuaStringValueArgument member) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public BuilderType zadd(String key, LuaLocalValue score, LuaLocalValue member) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public BuilderType zadd(String key, LuaLocalValue score, LuaStringValueArgument member) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public BuilderType zadd(String key, LuaDoubleValueArgument score, String member) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public BuilderType zadd(String key, LuaDoubleValueArgument score, LuaLocalValue member) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public BuilderType zadd(String key, LuaDoubleValueArgument score, LuaStringValueArgument member) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public BuilderType zadd(LuaLocalValue key, LuaLocalValue score, LuaLocalValue member) {
-        add(redisCallStatement("ZADD", arguments(local(key.getName()), local(score.getName()), local(member.getName()))));
-        return thisBuilder();
-    }
-
-    @Override
-    public BuilderType zadd(LuaLocalValue key, LuaLocalValue score, LuaStringValueArgument member) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public BuilderType zadd(LuaLocalValue key, LuaDoubleValueArgument score, String member) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public BuilderType zadd(LuaLocalValue key, LuaDoubleValueArgument score, LuaLocalValue member) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public BuilderType zadd(LuaLocalValue key, LuaDoubleValueArgument score, LuaStringValueArgument member) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public BuilderType zadd(LuaKeyArgument key, double score, String member) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public BuilderType zadd(LuaKeyArgument key, double score, LuaLocalValue member) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public BuilderType zadd(LuaKeyArgument key, double score, LuaStringValueArgument member) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public BuilderType zadd(LuaKeyArgument key, LuaLocalValue score, String member) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public BuilderType zadd(LuaKeyArgument key, LuaLocalValue score, LuaLocalValue member) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public BuilderType zadd(LuaKeyArgument key, LuaLocalValue score, LuaStringValueArgument member) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public BuilderType zadd(LuaKeyArgument key, LuaDoubleValueArgument score, String member) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public BuilderType zadd(LuaKeyArgument key, LuaDoubleValueArgument score, LuaLocalValue member) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public BuilderType zadd(LuaKeyArgument key, LuaDoubleValueArgument score, LuaStringValueArgument member) {
-        LuaAstArg keyArg = getOrCreateKeyArgument(key);
-        LuaAstArg scoreArg = getOrCreateArgvArgument(score);
-        LuaAstArg memberArg = getOrCreateArgvArgument(member);
-        add(redisCallStatement("ZADD", arguments(keyArg, scoreArg, memberArg)));
-        return thisBuilder();
-    }
-
-    @Override
-    public BuilderType zadd(String key, Map<String, Double> scoreMembers) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public BuilderType zadd(LuaLocalValue key, Map<String, Double> scoreMembers) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public BuilderType zadd(LuaKeyArgument key, Map<String, Double> scoreMembers) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public BuilderType zadd(String key, LuaLocalArray scoreMembers) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public BuilderType zadd(LuaLocalValue key, LuaLocalArray scoreMembers) {
-        add(redisCallStatement("ZADD", arguments(local(key.getName()), unpackArray(scoreMembers))));
-        return thisBuilder();
-    }
-
-    @Override
-    public BuilderType zadd(LuaKeyArgument key, LuaLocalArray scoreMembers) {
-        LuaAstArg keyArg = getOrCreateKeyArgument(key);
-        add(redisCallStatement("ZADD", arguments(keyArg, unpackArray(scoreMembers))));
-        return thisBuilder();
     }
 
     @Override
@@ -371,12 +161,7 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
     }
 
     @Override
-    public BuilderType hmset(LuaLocalValue key, Map<String, String> hash) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public BuilderType hmset(LuaKeyArgument key, Map<String, String> hash) {
+    public BuilderType hmset(LuaValue<String> key, Map<String, String> hash) {
         throw new UnsupportedOperationException("Not implemented");
     }
 
@@ -387,34 +172,95 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
     }
 
     @Override
-    public BuilderType hmset(LuaLocalValue key, LuaLocalArray hash) {
-        add(redisCallStatement("HMSET", arguments(local(key.getName()), unpackArray(hash))));
+    public BuilderType hmset(LuaValue<String> key, LuaLocalArray hash) {
+        add(redisCallStatement("HMSET", arguments(argument(key), unpackArray(hash))));
         return thisBuilder();
     }
 
     @Override
-    public BuilderType hmset(LuaKeyArgument key, LuaLocalArray hash) {
-        LuaAstArg keyArg = getOrCreateKeyArgument(key);
-        add(redisCallStatement("HMSET", arguments(keyArg, unpackArray(hash))));
+    public BuilderType zadd(String key, double score, String member) {
+        add(redisCallStatement("ZADD", arguments(stringValue(key), doubleValue(score), stringValue(member))));
         return thisBuilder();
     }
 
     @Override
-    public BuilderType del(String key) {
-        add(redisCallStatement("DEL", arguments(stringValue(key))));
+    public BuilderType zadd(String key, double score, LuaValue<String> member) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
+    public BuilderType zadd(String key, LuaValue<Double> score, String member) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
+    public BuilderType zadd(String key, LuaValue<Double> score, LuaValue<String> member) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
+    public BuilderType zadd(LuaValue<String> key, double score, String member) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
+    public BuilderType zadd(LuaValue<String> key, double score, LuaValue<String> member) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
+    public BuilderType zadd(LuaValue<String> key, LuaValue<Double> score, String member) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
+    public BuilderType zadd(LuaValue<String> key, LuaValue<Double> score, LuaValue<String> member) {
+        add(redisCallStatement("ZADD", arguments(argument(key), argument(score), argument(member))));
         return thisBuilder();
     }
 
     @Override
-    public BuilderType del(LuaLocalValue key) {
-        add(redisCallStatement("DEL", arguments(stringValue(key.getName()))));
+    public BuilderType zadd(String key, Map<String, Double> scoreMembers) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
+    public BuilderType zadd(LuaValue<String> key, Map<String, Double> scoreMembers) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
+    public BuilderType zadd(String key, LuaLocalArray scoreMembers) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
+    public BuilderType zadd(LuaValue<String> key, LuaLocalArray scoreMembers) {
+        add(redisCallStatement("ZADD", arguments(argument(key), unpackArray(scoreMembers))));
         return thisBuilder();
     }
 
     @Override
-    public BuilderType del(LuaKeyArgument key) {
-        LuaAstArg keyArg = getOrCreateKeyArgument(key);
-        add(redisCallStatement("DEL", arguments(keyArg)));
-        return thisBuilder();
+    public LuaLocalValue zscore(String key, String member) {
+        LuaAstLocalDeclaration local = declareNewLocal();
+        add(assignment(local, redisCall("ZSCORE", arguments(stringValue(key), stringValue(member)))));
+        return new LuaLocalValue(local.getName());
+    }
+
+    @Override
+    public LuaLocalValue zscore(LuaValue<String> key, String member) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
+    public LuaLocalValue zscore(String key, LuaValue<String> member) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
+    public LuaLocalValue zscore(LuaValue<String> key, LuaValue<String> member) {
+        LuaAstLocalDeclaration local = declareNewLocal();
+        add(assignment(local, redisCall("ZSCORE", arguments(argument(key), argument(member)))));
+        return new LuaLocalValue(local.getName());
     }
 }

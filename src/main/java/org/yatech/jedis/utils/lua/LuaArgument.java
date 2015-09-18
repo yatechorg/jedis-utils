@@ -3,7 +3,7 @@ package org.yatech.jedis.utils.lua;
 /**
  * Created by Yinon Avraham on 11/09/2015.
  */
-abstract class LuaArgument<T> {
+abstract class LuaArgument<T> implements LuaValue<T> {
 
     private final String name;
     private T value;

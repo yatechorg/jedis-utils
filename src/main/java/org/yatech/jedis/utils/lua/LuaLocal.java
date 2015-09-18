@@ -3,7 +3,7 @@ package org.yatech.jedis.utils.lua;
 /**
  * Created by Yinon Avraham on 01/09/2015.
  */
-abstract class LuaLocal implements LuaValue {
+abstract class LuaLocal<T> implements LuaValue<T> {
 
     private final String name;
 
