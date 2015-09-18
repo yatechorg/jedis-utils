@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>jedis-utils by yatechorg</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>jedis-utils</h1>
+        <h2>Jedis utilities</h2>
+        <a href="https://github.com/yatechorg/jedis-utils" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <p><a href="https://travis-ci.org/yatechorg/jedis-utils"><img src="https://travis-ci.org/yatechorg/jedis-utils.svg" alt="Build Status"></a>
+<a href="https://bintray.com/yatech/maven/jedis-utils/_latestVersion"><img src="https://api.bintray.com/packages/yatech/maven/jedis-utils/images/download.svg" alt="Download"></a></p>
+
+<h1>
+<a id="jedis-utils" class="anchor" href="#jedis-utils" aria-hidden="true"><span class="octicon octicon-link"></span></a>jedis-utils</h1>
+
+<p>Utilities for common tasks using <a href="https://github.com/xetorthio/jedis">Jedis</a> (the java redis client).</p>
+
+<h2>
+<a id="lua-script-builder" class="anchor" href="#lua-script-builder" aria-hidden="true"><span class="octicon octicon-link"></span></a>Lua Script Builder</h2>
+
+<p>A builder facility for building lua scripts to be executed in Redis using Jedis. 
+The builder uses an API similar to the API provided by Jedis. </p>
+
+<p>For example:</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-k">import static</span> <span class="pl-smi">org.yatech.jedis.utils.lua.LuaScriptBuilder.*</span>;
+<span class="pl-k">import</span> <span class="pl-smi">org.yatech.jedis.utils.lua.LuaScriptBuilder</span>;
+<span class="pl-k">import</span> <span class="pl-smi">org.yatech.jedis.utils.lua.LuaScript</span>;
+<span class="pl-k">import</span> <span class="pl-smi">org.yatech.jedis.utils.lua.LuaLocalArray</span>;
+
+<span class="pl-c1">...</span>
+
+<span class="pl-smi">LuaScriptBuilder</span> builder <span class="pl-k">=</span> startScript();
+builder<span class="pl-k">.</span>select(<span class="pl-c1">0</span>);
+<span class="pl-smi">LuaLocalArray</span> data <span class="pl-k">=</span> builder<span class="pl-k">.</span>hgetAll(<span class="pl-s"><span class="pl-pds">"</span>key1<span class="pl-pds">"</span></span>);
+builder<span class="pl-k">.</span>select(<span class="pl-c1">1</span>);
+       .hmset(<span class="pl-s"><span class="pl-pds">"</span>key1<span class="pl-pds">"</span></span>, data)
+       .select(<span class="pl-c1">0</span>)
+       .del(<span class="pl-s"><span class="pl-pds">"</span>key1<span class="pl-pds">"</span></span>);
+<span class="pl-smi">LuaScript</span> script <span class="pl-k">=</span> builder<span class="pl-k">.</span>endScript();
+
+<span class="pl-smi">Jedis</span> jedis <span class="pl-k">=</span> <span class="pl-c1">...</span>
+script<span class="pl-k">.</span>exec(jedis);</pre></div>
+
+<p>It is also possible to create prepared scripts with arguments and with some control statements.
+For example (Groovy):</p>
+
+<div class="highlight highlight-source-groovy"><pre><span class="pl-k">import static</span> <span class="pl-smi">org.yatech.jedis.utils.lua.LuaScriptBuilder.*</span>
+<span class="pl-k">import static</span> <span class="pl-smi">org.yatech.jedis.utils.lua.LuaConditoins.*</span>
+
+<span class="pl-k">..</span>.
+
+<span class="pl-k">def</span> key1 <span class="pl-k">=</span> newKeyArgument(<span class="pl-s"><span class="pl-pds">'</span>key1<span class="pl-pds">'</span></span>)
+<span class="pl-k">def</span> key2 <span class="pl-k">=</span> newKeyArgument(<span class="pl-s"><span class="pl-pds">'</span>key2<span class="pl-pds">'</span></span>)
+<span class="pl-k">def</span> member1 <span class="pl-k">=</span> newStringValueArgument(<span class="pl-s"><span class="pl-pds">'</span>member1<span class="pl-pds">'</span></span>)
+<span class="pl-k">def</span> score <span class="pl-k">=</span> newDoubleValueArgument(<span class="pl-s"><span class="pl-pds">'</span>score<span class="pl-pds">'</span></span>)
+<span class="pl-k">def</span> db0 <span class="pl-k">=</span> newIntValueArgument(<span class="pl-s"><span class="pl-pds">'</span>db0<span class="pl-pds">'</span></span>)
+<span class="pl-k">def</span> db1 <span class="pl-k">=</span> newIntValueArgument(<span class="pl-s"><span class="pl-pds">'</span>db1<span class="pl-pds">'</span></span>)
+
+<span class="pl-k">def</span> builder <span class="pl-k">=</span> startScript()
+builder<span class="pl-k">.</span>select(db0)
+<span class="pl-k">def</span> data <span class="pl-k">=</span> builder<span class="pl-k">.</span>hgetAll(key1)
+builder<span class="pl-k">.</span>select(db1)
+<span class="pl-k">def</span> existingScore <span class="pl-k">=</span> builder<span class="pl-k">.</span>zscore(key2, member1)
+builder<span class="pl-k">.</span>ifCondition(isNull(existingScore))<span class="pl-k">.</span>then(
+        startBlock(builder)
+        .zadd(key2, score, member1)
+        .endBlock())
+    .endIf()
+.hmset(key1, data)
+.select(db0)
+.del(key1)
+<span class="pl-k">def</span> preparedScript <span class="pl-k">=</span> builder<span class="pl-k">.</span>endPreparedScript()
+
+preparedScript<span class="pl-k">.</span>setKeyArgument(<span class="pl-s"><span class="pl-pds">'</span>key1<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>myhash1<span class="pl-pds">'</span></span>)
+preparedScript<span class="pl-k">.</span>setKeyArgument(<span class="pl-s"><span class="pl-pds">'</span>key2<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>myzset1<span class="pl-pds">'</span></span>)
+preparedScript<span class="pl-k">.</span>setValueArgument(<span class="pl-s"><span class="pl-pds">'</span>db0<span class="pl-pds">'</span></span>,<span class="pl-c1">7</span>)
+preparedScript<span class="pl-k">.</span>setValueArgument(<span class="pl-s"><span class="pl-pds">'</span>db1<span class="pl-pds">'</span></span>,<span class="pl-c1">8</span>)
+preparedScript<span class="pl-k">.</span>setValueArgument(<span class="pl-s"><span class="pl-pds">'</span>member1<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>thefirstmember<span class="pl-pds">'</span></span>)
+preparedScript<span class="pl-k">.</span>setValueArgument(<span class="pl-s"><span class="pl-pds">'</span>score<span class="pl-pds">'</span></span>,<span class="pl-c1">1.234</span>)
+<span class="pl-k">Jedis</span> jedis <span class="pl-k">=</span> <span class="pl-k">..</span>.
+preparedScript<span class="pl-k">.</span>exec(jedis)</pre></div>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/yatechorg/jedis-utils/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/yatechorg/jedis-utils/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/yatechorg/jedis-utils"></a> is maintained by <a href="https://github.com/yatechorg">yatechorg</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
