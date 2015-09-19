@@ -118,14 +118,14 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
     // *** Jedis Commands ***
 
     @Override
-    public BuilderType select(int db) {
-        add(redisCallStatement("SELECT", arguments(new LuaAstIntValue(db))));
+    public BuilderType select(int index) {
+        add(redisCallStatement("SELECT", arguments(new LuaAstIntValue(index))));
         return thisBuilder();
     }
 
     @Override
-    public BuilderType select(LuaValue<Integer> db) {
-        add(redisCallStatement("SELECT", arguments(argument(db))));
+    public BuilderType select(LuaValue<Integer> index) {
+        add(redisCallStatement("SELECT", arguments(argument(index))));
         return thisBuilder();
     }
 
@@ -157,11 +157,13 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
 
     @Override
     public BuilderType hmset(String key, Map<String, String> hash) {
+        //TODO Implement
         throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override
     public BuilderType hmset(LuaValue<String> key, Map<String, String> hash) {
+        //TODO Implement
         throw new UnsupportedOperationException("Not implemented");
     }
 
@@ -185,32 +187,38 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
 
     @Override
     public BuilderType zadd(String key, double score, LuaValue<String> member) {
-        throw new UnsupportedOperationException("Not implemented");
+        add(redisCallStatement("ZADD", arguments(stringValue(key), doubleValue(score), argument(member))));
+        return thisBuilder();
     }
 
     @Override
     public BuilderType zadd(String key, LuaValue<Double> score, String member) {
-        throw new UnsupportedOperationException("Not implemented");
+        add(redisCallStatement("ZADD", arguments(stringValue(key), argument(score), stringValue(member))));
+        return thisBuilder();
     }
 
     @Override
     public BuilderType zadd(String key, LuaValue<Double> score, LuaValue<String> member) {
-        throw new UnsupportedOperationException("Not implemented");
+        add(redisCallStatement("ZADD", arguments(stringValue(key), argument(score), argument(member))));
+        return thisBuilder();
     }
 
     @Override
     public BuilderType zadd(LuaValue<String> key, double score, String member) {
-        throw new UnsupportedOperationException("Not implemented");
+        add(redisCallStatement("ZADD", arguments(argument(key), doubleValue(score), stringValue(member))));
+        return thisBuilder();
     }
 
     @Override
     public BuilderType zadd(LuaValue<String> key, double score, LuaValue<String> member) {
-        throw new UnsupportedOperationException("Not implemented");
+        add(redisCallStatement("ZADD", arguments(argument(key), doubleValue(score), argument(member))));
+        return thisBuilder();
     }
 
     @Override
     public BuilderType zadd(LuaValue<String> key, LuaValue<Double> score, String member) {
-        throw new UnsupportedOperationException("Not implemented");
+        add(redisCallStatement("ZADD", arguments(argument(key), argument(score), stringValue(member))));
+        return thisBuilder();
     }
 
     @Override
@@ -221,17 +229,20 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
 
     @Override
     public BuilderType zadd(String key, Map<String, Double> scoreMembers) {
+        //TODO Implement
         throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override
     public BuilderType zadd(LuaValue<String> key, Map<String, Double> scoreMembers) {
+        //TODO Implement
         throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override
     public BuilderType zadd(String key, LuaLocalArray scoreMembers) {
-        throw new UnsupportedOperationException("Not implemented");
+        add(redisCallStatement("ZADD", arguments(stringValue(key), unpackArray(scoreMembers))));
+        return thisBuilder();
     }
 
     @Override
@@ -249,12 +260,16 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
 
     @Override
     public LuaLocalValue zscore(LuaValue<String> key, String member) {
-        throw new UnsupportedOperationException("Not implemented");
+        LuaAstLocalDeclaration local = declareNewLocal();
+        add(assignment(local, redisCall("ZSCORE", arguments(argument(key), stringValue(member)))));
+        return new LuaLocalValue(local.getName());
     }
 
     @Override
     public LuaLocalValue zscore(String key, LuaValue<String> member) {
-        throw new UnsupportedOperationException("Not implemented");
+        LuaAstLocalDeclaration local = declareNewLocal();
+        add(assignment(local, redisCall("ZSCORE", arguments(stringValue(key), argument(member)))));
+        return new LuaLocalValue(local.getName());
     }
 
     @Override
