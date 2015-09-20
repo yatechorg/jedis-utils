@@ -23,7 +23,6 @@ buildscript {
 }
 
 cobertura.coverageFormats = ['html', 'xml']
-cobertura.coverageSourceDirs = sourceSets.main.groovy.srcDirs
 
 repositories {
     jcenter()
