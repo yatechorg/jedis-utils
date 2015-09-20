@@ -82,7 +82,7 @@ bintray {
     key = bintrayApiKey
 
     configurations = ['archives']
-    dryRun = true //Whether to run this as dry-run, without deploying
+    dryRun = false //Whether to run this as dry-run, without deploying
     publish = false //If version should be auto published after an upload
     pkg {
         userOrg = bintrayOwner
@@ -130,5 +130,11 @@ task wrapper(type: Wrapper) {
 task publishSnapshotOrRelease {
     if (versionId.endsWith('-SNAPSHOT')) {
         dependsOn('artifactoryPublish')
+    } else {
+        dependsOn('bintrayUpload')
     }
+}
+
+task getVersion << {
+    println version
 }
