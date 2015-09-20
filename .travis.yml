@@ -11,5 +11,6 @@ before_install:
  - chmod +x .travis-scripts/push-javadoc-to-gh-pages.sh
 
 after_success:
+ - ./gradlew cobertura coveralls
  - .travis-scripts/deploy-artifacts.sh
  - .travis-scripts/push-javadoc-to-gh-pages.sh
