@@ -74,6 +74,24 @@ publishing {
             artifact javadocJar {
                 classifier 'javadoc'
             }
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('name',bintrayPackage)
+                root.appendNode('description',bintrayPackageDescription)
+                root.appendNode('url',githubPagesUrl)
+                def license = root.appendNode('licenses').appendNode('license')
+                license.appendNode('name','The MIT License (MIT)')
+                license.appendNode('url','http://opensource.org/licenses/mit-license.php')
+                license.appendNode('distribution','repo')
+                def scm = root.appendNode('scm')
+                scm.appendNode('url', githubUrl)
+                scm.appendNode('connection', 'scm:' + githubUrl + '.git')
+                scm.appendNode('developerConnection', 'scm:git://github.com/yatechorg/jedis-utils.git')
+                def developer = root.appendNode('developers').appendNode('developer')
+                developer.appendNode('id', 'yinonavraham')
+                developer.appendNode('name', 'Yinon Avraham')
+                developer.appendNode('email', 'yinonavraham@gmail.com')
+            }
         }
     }
 }
@@ -94,7 +112,7 @@ bintray {
         userOrg = bintrayOwner
         repo = bintrayRepo
         name = bintrayPackage
-        desc = 'Utilities for common tasks using Jedis (Java Redis client)'
+        desc = bintrayPackageDescription
         websiteUrl = githubPagesUrl
         issueTrackerUrl = "${githubUrl}/issues"
         vcsUrl = "${githubUrl}.git"
