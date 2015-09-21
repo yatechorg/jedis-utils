@@ -15,6 +15,9 @@ class LuaScriptVisitor implements LuaAstVisitor {
         this.depth = 0;
     }
 
+    /**
+     * @return the script text constructed by this visitor
+     */
     @Override
     public String toString() {
         return sb.toString();
