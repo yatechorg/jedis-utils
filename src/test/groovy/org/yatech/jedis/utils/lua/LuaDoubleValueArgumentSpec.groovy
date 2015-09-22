@@ -14,6 +14,7 @@ class LuaDoubleValueArgumentSpec extends Specification {
         expect:
         arg.name == 'thename'
         arg.value == null
+        arg.toString() == 'thename=null'
     }
 
     def 'constructor with explicit value'() {
@@ -23,6 +24,7 @@ class LuaDoubleValueArgumentSpec extends Specification {
         expect:
         arg.name == 'thename'
         arg.value == 3.1415
+        arg.toString() == 'thename=3.1415'
     }
 
     def 'equals and hash code'() {

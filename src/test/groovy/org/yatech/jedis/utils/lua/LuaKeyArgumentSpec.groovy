@@ -14,6 +14,7 @@ class LuaKeyArgumentSpec extends Specification {
         expect:
         arg.name == 'thename'
         arg.value == null
+        arg.toString() == 'thename=null'
     }
 
     def 'constructor with explicit value'() {
@@ -23,6 +24,7 @@ class LuaKeyArgumentSpec extends Specification {
         expect:
         arg.name == 'thename'
         arg.value == 'thevalue'
+        arg.toString() == 'thename=thevalue'
     }
 
     def 'equals and hash code'() {

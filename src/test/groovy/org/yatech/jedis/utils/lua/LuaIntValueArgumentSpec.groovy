@@ -14,6 +14,7 @@ class LuaIntValueArgumentSpec extends Specification {
         expect:
         arg.name == 'thename'
         arg.value == null
+        arg.toString() == 'thename=null'
     }
 
     def 'constructor with explicit value'() {
@@ -23,6 +24,7 @@ class LuaIntValueArgumentSpec extends Specification {
         expect:
         arg.name == 'thename'
         arg.value == 7
+        arg.toString() == 'thename=7'
     }
 
     def 'equals and hash code'() {
