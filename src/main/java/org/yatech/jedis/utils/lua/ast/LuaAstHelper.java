@@ -10,6 +10,8 @@ import java.util.List;
  */
 public class LuaAstHelper {
 
+    private LuaAstHelper() {}
+
     public static LuaAstFunctionCallStatement redisCallStatement(String methodName, List<LuaAstExpression> arguments) {
         return new LuaAstFunctionCallStatement(redisCall(methodName, arguments));
     }

@@ -12,6 +12,8 @@ import org.yatech.jedis.utils.lua.ast.LuaAstNot;
  */
 public class LuaConditions {
 
+    private LuaConditions() {}
+
     /**
      * IS NULL predicate
      * @param value the value for which to check
