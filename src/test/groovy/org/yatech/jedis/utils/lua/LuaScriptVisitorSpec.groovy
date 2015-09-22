@@ -90,4 +90,182 @@ class LuaScriptVisitorSpec extends Specification {
                 'redis.call("DEL",KEYS[1])\n' +
                 'return\n'
     }
+
+    def 'visit function call statement'() {
+        given:
+        def function = Mock(LuaAstFunction)
+        def functionCallStatement = new LuaAstFunctionCallStatement(function)
+        def visitor = new LuaScriptVisitor()
+
+        when:
+        visitor.visit(functionCallStatement)
+
+        then:
+        1 * function.accept(visitor)
+    }
+
+    def 'visit assignment statement'() {
+        given:
+        def expression = new LuaAstStringValue('the-value')
+        def assignmentStatement = new LuaAstAssignmentStatement(local, expression)
+        def visitor = new LuaScriptVisitor()
+
+        when:
+        visitor.visit(assignmentStatement)
+
+        then:
+        visitor.toString() == expected
+
+        where:
+        local                                  | expected
+        new LuaAstLocal('thelocal')            | 'thelocal = "the-value"\n'
+        new LuaAstLocalDeclaration('thelocal') | 'local thelocal = "the-value"\n'
+    }
+
+    def 'visit if statement'() {
+        given:
+        def condition = new LuaAstNot(new LuaAstLocal('thelocal'))
+        def block = new LuaAstScript()
+        block.statements.add(new LuaAstReturnStatement())
+        def ifStatement = new LuaAstIfStatement(condition, block)
+        def visitor = new LuaScriptVisitor()
+
+        when:
+        visitor.visit(ifStatement)
+
+        then:
+        visitor.toString() == 'if (not thelocal) then\n  return\nend\n'
+    }
+
+    def 'visit return statement - void'() {
+        given:
+        def statement = new LuaAstReturnStatement()
+        def visitor = new LuaScriptVisitor()
+
+        when:
+        visitor.visit(statement)
+
+        then:
+        visitor.toString() == 'return\n'
+    }
+
+    def 'visit return statement - local'() {
+        given:
+        def statement = new LuaAstReturnStatement(new LuaAstLocal('thelocal'))
+        def visitor = new LuaScriptVisitor()
+
+        when:
+        visitor.visit(statement)
+
+        then:
+        visitor.toString() == 'return thelocal\n'
+    }
+
+    def 'visit redis call'() {
+        given:
+        def redisCall = new LuaAstRedisCall('THEMETHOD', [new LuaAstLocal('thelocal'), new LuaAstStringValue('value')])
+        def visitor = new LuaScriptVisitor()
+
+        when:
+        visitor.visit(redisCall)
+
+        then:
+        visitor.toString() == 'redis.call("THEMETHOD",thelocal,"value")'
+    }
+
+    def 'visit unpack'() {
+        given:
+        def unpack = new LuaAstUnpack(new LuaAstLocal('thelocal'))
+        def visitor = new LuaScriptVisitor()
+
+        when:
+        visitor.visit(unpack)
+
+        then:
+        visitor.toString() == 'unpack(thelocal)'
+    }
+
+    def 'visit string value'() {
+        given:
+        def value = new LuaAstStringValue('value')
+        def visitor = new LuaScriptVisitor()
+
+        when:
+        visitor.visit(value)
+
+        then:
+        visitor.toString() == '"value"'
+    }
+
+    def 'visit int value'() {
+        given:
+        def value = new LuaAstIntValue(17)
+        def visitor = new LuaScriptVisitor()
+
+        when:
+        visitor.visit(value)
+
+        then:
+        visitor.toString() == '17'
+    }
+
+    def 'visit double value'() {
+        given:
+        def value = new LuaAstDoubleValue(3.1415)
+        def visitor = new LuaScriptVisitor()
+
+        when:
+        visitor.visit(value)
+
+        then:
+        visitor.toString() == '3.1415'
+    }
+
+    def 'visit argument'() {
+        given:
+        def arg = new LuaAstArg('thearg')
+        def visitor = new LuaScriptVisitor()
+
+        when:
+        visitor.visit(arg)
+
+        then:
+        visitor.toString() == 'thearg'
+    }
+
+    def 'visit local declaration'() {
+        given:
+        def local = new LuaAstLocalDeclaration('thelocal')
+        def visitor = new LuaScriptVisitor()
+
+        when:
+        visitor.visit(local)
+
+        then:
+        visitor.toString() == 'local thelocal'
+    }
+
+    def 'visit local'() {
+        given:
+        def local = new LuaAstLocal('thelocal')
+        def visitor = new LuaScriptVisitor()
+
+        when:
+        visitor.visit(local)
+
+        then:
+        visitor.toString() == 'thelocal'
+    }
+
+    def 'visit not'() {
+        given:
+        def not = new LuaAstNot(new LuaAstLocal('thelocal'))
+        def visitor = new LuaScriptVisitor()
+
+        when:
+        visitor.visit(not)
+
+        then:
+        visitor.toString() == 'not thelocal'
+    }
 }
