@@ -3,6 +3,7 @@ package org.yatech.jedis.utils.lua
 import org.yatech.jedis.utils.lua.ast.LuaAstArg
 import org.yatech.jedis.utils.lua.ast.LuaAstAssignmentStatement
 import org.yatech.jedis.utils.lua.ast.LuaAstDoubleValue
+import org.yatech.jedis.utils.lua.ast.LuaAstFunction
 import org.yatech.jedis.utils.lua.ast.LuaAstFunctionCallStatement
 import org.yatech.jedis.utils.lua.ast.LuaAstIfStatement
 import org.yatech.jedis.utils.lua.ast.LuaAstIntValue
