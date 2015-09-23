@@ -67,6 +67,56 @@ class AbstractLuaScriptBuilderSpec extends Specification {
                 'redis.call("SELECT",theLocal)\n'
     }
 
+    def "set"() {
+        given:
+        def arg1 = newKeyArgument('arg1')
+        def arg2 = newStringValueArgument('arg2')
+        def local1 = new LuaLocalValue('theLocal1')
+        def local2 = new LuaLocalValue('theLocal2')
+
+        when:
+        def script = build { AbstractLuaScriptBuilder builder ->
+            builder.set('thekey', 'thevalue')
+            builder.set('thekey', arg2)
+            builder.set('thekey', local1)
+            builder.set(arg1, 'thevalue')
+            builder.set(arg1, arg2)
+            builder.set(arg1, local1)
+            builder.set(local1, 'thevalue')
+            builder.set(local1, arg2)
+            builder.set(local1, local2)
+        }
+
+        then:
+        script == 'redis.call("SET","thekey","thevalue")\n' +
+                'redis.call("SET","thekey",ARGV[1])\n' +
+                'redis.call("SET","thekey",theLocal1)\n' +
+                'redis.call("SET",KEYS[1],"thevalue")\n' +
+                'redis.call("SET",KEYS[2],ARGV[2])\n' +
+                'redis.call("SET",KEYS[3],theLocal1)\n' +
+                'redis.call("SET",theLocal1,"thevalue")\n' +
+                'redis.call("SET",theLocal1,ARGV[3])\n' +
+                'redis.call("SET",theLocal1,theLocal2)\n'
+    }
+
+    def "get"() {
+        given:
+        def arg = newKeyArgument('arg')
+        def local = new LuaLocalValue('theLocal')
+
+        when:
+        def script = build { AbstractLuaScriptBuilder builder ->
+            builder.get('thekey')
+            builder.get(arg)
+            builder.get(local)
+        }
+
+        then:
+        script == 'local dummyLocal = redis.call("GET","thekey")\n' +
+                'local dummyLocal = redis.call("GET",KEYS[1])\n' +
+                'local dummyLocal = redis.call("GET",theLocal)\n'
+    }
+
     def "del"() {
         given:
         def arg = newKeyArgument('arg')
