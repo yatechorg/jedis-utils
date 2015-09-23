@@ -39,7 +39,7 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
         return unpack(local(hash.getName()));
     }
 
-    private <T> LuaAstExpression argument(LuaValue<T> value) {
+    protected <T> LuaAstExpression argument(LuaValue<T> value) {
         if (value instanceof LuaLocal) {
             return local(((LuaLocal) value).getName());
         } else if (value instanceof LuaKeyArgument) {
@@ -127,6 +127,44 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
     public BuilderType select(LuaValue<Integer> index) {
         add(redisCallStatement("SELECT", arguments(argument(index))));
         return thisBuilder();
+    }
+
+    @Override
+    public BuilderType set(String key, String value) {
+        add(redisCallStatement("SET", arguments(stringValue(key), stringValue(value))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType set(String key, LuaValue<String> value) {
+        add(redisCallStatement("SET", arguments(stringValue(key), argument(value))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType set(LuaValue<String> key, String value) {
+        add(redisCallStatement("SET", arguments(argument(key), stringValue(value))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType set(LuaValue<String> key, LuaValue<String> value) {
+        add(redisCallStatement("SET", arguments(argument(key), argument(value))));
+        return thisBuilder();
+    }
+
+    @Override
+    public LuaLocalValue get(String key) {
+        LuaAstLocalDeclaration local = declareNewLocal();
+        add(assignment(local, redisCall("GET", arguments(stringValue(key)))));
+        return new LuaLocalValue(local.getName());
+    }
+
+    @Override
+    public LuaLocalValue get(LuaValue<String> key) {
+        LuaAstLocalDeclaration local = declareNewLocal();
+        add(assignment(local, redisCall("GET", arguments(argument(key)))));
+        return new LuaLocalValue(local.getName());
     }
 
     @Override

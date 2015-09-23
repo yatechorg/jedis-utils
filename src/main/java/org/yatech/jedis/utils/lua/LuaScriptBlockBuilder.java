@@ -1,6 +1,7 @@
 package org.yatech.jedis.utils.lua;
 
 import org.yatech.jedis.utils.lua.ast.LuaAstArg;
+import org.yatech.jedis.utils.lua.ast.LuaAstReturnStatement;
 
 /**
  * Builder for a script block
@@ -42,6 +43,16 @@ public class LuaScriptBlockBuilder extends AbstractLuaScriptBuilder<LuaScriptBlo
      * @return the new {@link LuaScriptBlock} instance
      */
     public LuaScriptBlock endBlock() {
+        return new LuaScriptBlock(script);
+    }
+
+    /**
+     * End the script block, adding a return value statement
+     * @param value the value to return
+     * @return the new {@link LuaScriptBlock} instance
+     */
+    public LuaScriptBlock endBlockReturn(LuaValue value) {
+        add(new LuaAstReturnStatement(argument(value)));
         return new LuaScriptBlock(script);
     }
 

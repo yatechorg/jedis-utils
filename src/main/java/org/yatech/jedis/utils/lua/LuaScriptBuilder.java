@@ -80,6 +80,17 @@ public class LuaScriptBuilder extends AbstractLuaScriptBuilder<LuaScriptBuilder>
         return new LuaScript(scriptText);
     }
 
+    /**
+     * End building the script, adding a return value statement
+     * @param value the value to return
+     * @return the new {@link LuaScript} instance
+     */
+    public LuaScript endScriptReturn(LuaValue value) {
+        add(new LuaAstReturnStatement(argument(value)));
+        String scriptText = buildScriptText();
+        return new LuaScript(scriptText);
+    }
+
     private boolean endsWithReturnStatement() {
         List<LuaAstStatement> statements = script.getStatements();
         return !statements.isEmpty() && statements.get(statements.size()-1) instanceof LuaAstReturnStatement;
@@ -93,6 +104,17 @@ public class LuaScriptBuilder extends AbstractLuaScriptBuilder<LuaScriptBuilder>
         if (!endsWithReturnStatement()) {
             add(new LuaAstReturnStatement());
         }
+        String scriptText = buildScriptText();
+        return new LuaPreparedScript(scriptText, new ArrayList<>(keyArg2AstArg.keySet()), new ArrayList<>(valueArg2AstArg.keySet()));
+    }
+
+    /**
+     * End building the prepared script, adding a return value statement
+     * @param value the value to return
+     * @return the new {@link LuaPreparedScript} instance
+     */
+    public LuaPreparedScript endPreparedScriptReturn(LuaValue value) {
+        add(new LuaAstReturnStatement(argument(value)));
         String scriptText = buildScriptText();
         return new LuaPreparedScript(scriptText, new ArrayList<>(keyArg2AstArg.keySet()), new ArrayList<>(valueArg2AstArg.keySet()));
     }
