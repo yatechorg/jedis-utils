@@ -33,6 +33,10 @@ tasks.withType(Test) {
     reports.html.destination = file("${reporting.baseDir}/${name}")
 }
 
+test {
+    testLogging.showStandardStreams = true
+}
+
 cobertura.coverageFormats = ['html', 'xml']
 
 repositories {

@@ -1,29 +1,12 @@
 package org.yatech.jedis.utils.lua
 
-import spock.lang.Specification
-
 import static org.yatech.jedis.utils.lua.LuaConditions.isNull
-import static org.yatech.jedis.utils.lua.LuaScriptBuilder.startBlock
 import static org.yatech.jedis.utils.lua.LuaScriptBuilder.startScript
 
 /**
  * Created by yinona on 22/09/15.
  */
 class LuaScriptIntegrationSpec extends BaseIntegrationSpec {
-
-    def 'script with a single zadd command'() {
-        given:
-        def script = startScript().with {
-            zadd('key1', 1.23, 'mem1')
-            endScript()
-        }
-
-        when:
-        script.exec(jedis)
-
-        then:
-        jedis.zscore('key1', 'mem1') == 1.23
-    }
 
     def 'test if statement 1'() {
         given:
@@ -78,6 +61,34 @@ class LuaScriptIntegrationSpec extends BaseIntegrationSpec {
         res = script.exec(jedis)
         then:
         res == 'v2'
+    }
+
+    def 'zadd in script with double value'() {
+        given:
+        def script = startScript().with {
+            zadd('key1', 1.23, 'mem1')
+            endScript()
+        }
+
+        when:
+        script.exec(jedis)
+
+        then:
+        jedis.zscore('key1', 'mem1') == 1.23
+    }
+
+    def 'zadd and return zscore in script with double value'() {
+        given:
+        def script = startScript().with {
+            zadd('key1', 1.23, 'mem1')
+            endScriptReturn(zscore('key1', 'mem1'))
+        }
+
+        when:
+        def res = script.exec(jedis)
+
+        then:
+        res == '1.23'
     }
 
 }
