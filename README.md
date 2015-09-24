@@ -32,7 +32,7 @@ script.exec(jedis);
 ```
 
 It is also possible to create prepared scripts with arguments and with some control statements.
-For example (Groovy):
+For example (this time in Groovy):
 ```groovy
 import static org.yatech.jedis.utils.lua.LuaScriptBuilder.*
 import static org.yatech.jedis.utils.lua.LuaConditoins.*
@@ -41,32 +41,32 @@ import static org.yatech.jedis.utils.lua.LuaConditoins.*
 
 def key1 = newKeyArgument('key1')
 def key2 = newKeyArgument('key2')
-def member1 = newStringValueArgument('member1')
+def member = newStringValueArgument('member')
 def score = newDoubleValueArgument('score')
 def db0 = newIntValueArgument('db0')
 def db1 = newIntValueArgument('db1')
 
-def builder = startScript()
-builder.select(db0)
-def data = builder.hgetAll(key1)
-builder.select(db1)
-def existingScore = builder.zscore(key2, member1)
-builder.ifCondition(isNull(existingScore)).then(
-        startBlock(builder)
-        .zadd(key2, score, member1)
-        .endBlock())
-    .endIf()
-.hmset(key1, data)
-.select(db0)
-.del(key1)
-def preparedScript = builder.endPreparedScript()
+def script = startScript().with {
+    select(db0)
+    def payload = hgetAll(key1)
+    select(db1)
+    def existingScore = zscore(key2, member)
+    ifCondition(isNull(existingScore)).then(startBlock(it).with {
+        zadd(key2, score, member)
+        endBlock()
+    }).endIf()
+    hmset(key1, payload)
+    select(db0)
+    del(key1)
+    endPreparedScript()
+}
 
-preparedScript.setKeyArgument('key1','myhash1')
-preparedScript.setKeyArgument('key2','myzset1')
-preparedScript.setValueArgument('db0',7)
-preparedScript.setValueArgument('db1',8)
-preparedScript.setValueArgument('member1','thefirstmember')
-preparedScript.setValueArgument('score',1.234)
+script.setKeyArgument('key1','myhash1')
+script.setKeyArgument('key2','myzset1')
+script.setValueArgument('db0',7)
+script.setValueArgument('db1',8)
+script.setValueArgument('member','thefirstmember')
+script.setValueArgument('score',1.234)
 Jedis jedis = ...
-preparedScript.exec(jedis)
+script.exec(jedis)
 ```
