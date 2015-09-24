@@ -214,6 +214,37 @@ public interface JedisCommands<VoidReturnType> {
      */
     VoidReturnType persist(LuaValue<String> key);
 
+    // PEXPIRE
+
+    /**
+     * Set a key's time to live in milliseconds
+     * @param key
+     * @param milliseconds
+     * @return
+     */
+    VoidReturnType pexpire(String key, long milliseconds);
+    /**
+     * Set a key's time to live in milliseconds
+     * @param key
+     * @param milliseconds
+     * @return
+     */
+    VoidReturnType pexpire(String key, LuaValue<Long> milliseconds);
+    /**
+     * Set a key's time to live in milliseconds
+     * @param key
+     * @param milliseconds
+     * @return
+     */
+    VoidReturnType pexpire(LuaValue<String> key, long milliseconds);
+    /**
+     * Set a key's time to live in milliseconds
+     * @param key
+     * @param milliseconds
+     * @return
+     */
+    VoidReturnType pexpire(LuaValue<String> key, LuaValue<Long> milliseconds);
+
     // +------+
     // | HASH |
     // +------+
