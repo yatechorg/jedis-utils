@@ -433,6 +433,29 @@ class AbstractLuaScriptBuilderSpec extends Specification {
                 'redis.call("RENAMENX",theLocal,theLocal)\n'
     }
 
+    def "ttl"() {
+        given:
+        def arg = newKeyArgument('arg')
+        def local = new LuaLocalValue('theLocal')
+        def ret = []
+
+        when:
+        def script = build { AbstractLuaScriptBuilder builder -> builder.with {
+            ret << ttl('thekey')
+            ret << ttl(arg)
+            ret << ttl(local)
+        }}
+
+        then:
+        script == 'local dummyLocal = redis.call("TTL","thekey")\n' +
+                'local dummyLocal = redis.call("TTL",KEYS[1])\n' +
+                'local dummyLocal = redis.call("TTL",theLocal)\n'
+        ret.each {
+            assert it instanceof LuaLocalValue
+            assert it.name == 'dummyLocal'
+        }
+    }
+
     def "hgetAll"() {
         given:
         def arg = newKeyArgument('arg')

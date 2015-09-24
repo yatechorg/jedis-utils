@@ -361,6 +361,21 @@ public interface JedisCommands<VoidReturnType> {
      */
     VoidReturnType renamenx(LuaValue<String> key, LuaValue<String> newKey);
 
+    // PTTL
+
+    /**
+     * Get the time to live for a key
+     * @param key
+     * @return
+     */
+    LuaLocalValue ttl(String key);
+    /**
+     * Get the time to live for a key
+     * @param key
+     * @return
+     */
+    LuaLocalValue ttl(LuaValue<String> key);
+
     // +------+
     // | HASH |
     // +------+
