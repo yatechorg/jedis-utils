@@ -197,6 +197,29 @@ class AbstractLuaScriptBuilderSpec extends Specification {
                 'redis.call("EXPIREAT",theLocal,theLocal)\n'
     }
 
+    def "keys"() {
+        given:
+        def arg = newStringValueArgument('arg')
+        def local = new LuaLocalValue('theLocal')
+
+        when:
+        def res = []
+        def script = build { AbstractLuaScriptBuilder builder -> builder.with {
+            res << keys('pattern')
+            res << keys(arg)
+            res << keys(local)
+        }}
+
+        then:
+        script == 'local dummyLocal = redis.call("KEYS","pattern")\n' +
+                'local dummyLocal = redis.call("KEYS",ARGV[1])\n' +
+                'local dummyLocal = redis.call("KEYS",theLocal)\n'
+        res.each {
+            assert it instanceof LuaLocalArray
+            assert it.name == 'dummyLocal'
+        }
+    }
+
     def "hgetAll"() {
         given:
         def arg = newKeyArgument('arg')

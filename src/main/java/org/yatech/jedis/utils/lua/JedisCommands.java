@@ -122,7 +122,7 @@ public interface JedisCommands<VoidReturnType> {
      */
     VoidReturnType expire(LuaValue<String> key, LuaValue<Integer> seconds);
 
-    // EXPIRE
+    // EXPIREAT
 
     /**
      * Set the expiration for a key as a UNIX timestamp
@@ -152,6 +152,21 @@ public interface JedisCommands<VoidReturnType> {
      * @return
      */
     VoidReturnType expireAt(LuaValue<String> key, LuaValue<Long> timestamp);
+
+    // KEYS
+
+    /**
+     * Find all keys matching the pattern
+     * @param pattern
+     * @return
+     */
+    LuaLocalArray keys(String pattern);
+    /**
+     * Find all keys matching the pattern
+     * @param pattern
+     * @return
+     */
+    LuaLocalArray keys(LuaValue<String> pattern);
 
     // +------+
     // | HASH |

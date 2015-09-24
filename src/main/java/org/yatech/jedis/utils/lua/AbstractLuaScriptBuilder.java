@@ -238,6 +238,20 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
     }
 
     @Override
+    public LuaLocalArray keys(String pattern) {
+        LuaAstLocalDeclaration local = declareNewLocal();
+        add(assignment(local, redisCall("KEYS", arguments(stringValue(pattern)))));
+        return new LuaLocalArray(local.getName());
+    }
+
+    @Override
+    public LuaLocalArray keys(LuaValue<String> pattern) {
+        LuaAstLocalDeclaration local = declareNewLocal();
+        add(assignment(local, redisCall("KEYS", arguments(argument(pattern)))));
+        return new LuaLocalArray(local.getName());
+    }
+
+    @Override
     public LuaLocalArray hgetAll(String key) {
         LuaAstLocalDeclaration local = declareNewLocal();
         add(assignment(local, redisCall("HGETALL", arguments(stringValue(key)))));
