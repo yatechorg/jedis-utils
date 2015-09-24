@@ -252,6 +252,30 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
     }
 
     @Override
+    public BuilderType move(String key, int db) {
+        add(redisCallStatement("MOVE", arguments(stringValue(key), intValue(db))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType move(String key, LuaValue<Integer> db) {
+        add(redisCallStatement("MOVE", arguments(stringValue(key), argument(db))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType move(LuaValue<String> key, int db) {
+        add(redisCallStatement("MOVE", arguments(argument(key), intValue(db))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType move(LuaValue<String> key, LuaValue<Integer> db) {
+        add(redisCallStatement("MOVE", arguments(argument(key), argument(db))));
+        return thisBuilder();
+    }
+
+    @Override
     public LuaLocalArray hgetAll(String key) {
         LuaAstLocalDeclaration local = declareNewLocal();
         add(assignment(local, redisCall("HGETALL", arguments(stringValue(key)))));

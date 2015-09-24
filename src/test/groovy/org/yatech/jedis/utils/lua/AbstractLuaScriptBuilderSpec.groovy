@@ -220,6 +220,37 @@ class AbstractLuaScriptBuilderSpec extends Specification {
         }
     }
 
+    def "move"() {
+        given:
+        def keyArg = newKeyArgument('keyArg')
+        def dbArg = newIntValueArgument('dbArg')
+        def local = new LuaLocalValue('theLocal')
+
+        when:
+        def script = build { AbstractLuaScriptBuilder builder -> builder.with {
+            move('thekey', 1)
+            move('thekey', dbArg)
+            move('thekey', local)
+            move(keyArg, 2)
+            move(keyArg, dbArg)
+            move(keyArg, local)
+            move(local, 3)
+            move(local, dbArg)
+            move(local, local)
+        }}
+
+        then:
+        script == 'redis.call("MOVE","thekey",1)\n' +
+                'redis.call("MOVE","thekey",ARGV[1])\n' +
+                'redis.call("MOVE","thekey",theLocal)\n' +
+                'redis.call("MOVE",KEYS[1],2)\n' +
+                'redis.call("MOVE",KEYS[2],ARGV[2])\n' +
+                'redis.call("MOVE",KEYS[3],theLocal)\n' +
+                'redis.call("MOVE",theLocal,3)\n' +
+                'redis.call("MOVE",theLocal,ARGV[3])\n' +
+                'redis.call("MOVE",theLocal,theLocal)\n'
+    }
+
     def "hgetAll"() {
         given:
         def arg = newKeyArgument('arg')

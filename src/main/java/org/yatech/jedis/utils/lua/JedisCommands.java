@@ -168,6 +168,37 @@ public interface JedisCommands<VoidReturnType> {
      */
     LuaLocalArray keys(LuaValue<String> pattern);
 
+    // MOVE
+
+    /**
+     * Move a key to another database
+     * @param key
+     * @param db
+     * @return
+     */
+    VoidReturnType move(String key, int db);
+    /**
+     * Move a key to another database
+     * @param key
+     * @param db
+     * @return
+     */
+    VoidReturnType move(String key, LuaValue<Integer> db);
+    /**
+     * Move a key to another database
+     * @param key
+     * @param db
+     * @return
+     */
+    VoidReturnType move(LuaValue<String> key, int db);
+    /**
+     * Move a key to another database
+     * @param key
+     * @param db
+     * @return
+     */
+    VoidReturnType move(LuaValue<String> key, LuaValue<Integer> db);
+
     // +------+
     // | HASH |
     // +------+
