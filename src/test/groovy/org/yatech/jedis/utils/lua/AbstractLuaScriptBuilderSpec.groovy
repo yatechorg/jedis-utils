@@ -402,6 +402,37 @@ class AbstractLuaScriptBuilderSpec extends Specification {
                 'redis.call("RENAME",theLocal,theLocal)\n'
     }
 
+    def "renamenx"() {
+        given:
+        def keyArg = newKeyArgument('keyArg')
+        def newKeyArg = newKeyArgument('newKeyArg')
+        def local = new LuaLocalValue('theLocal')
+
+        when:
+        def script = build { AbstractLuaScriptBuilder builder -> builder.with {
+            renamenx('thekey', 'thenewkey')
+            renamenx('thekey', newKeyArg)
+            renamenx('thekey', local)
+            renamenx(keyArg, 'thenewkey')
+            renamenx(keyArg, newKeyArg)
+            renamenx(keyArg, local)
+            renamenx(local, 'thenewkey')
+            renamenx(local, newKeyArg)
+            renamenx(local, local)
+        }}
+
+        then:
+        script == 'redis.call("RENAMENX","thekey","thenewkey")\n' +
+                'redis.call("RENAMENX","thekey",KEYS[1])\n' +
+                'redis.call("RENAMENX","thekey",theLocal)\n' +
+                'redis.call("RENAMENX",KEYS[2],"thenewkey")\n' +
+                'redis.call("RENAMENX",KEYS[3],KEYS[4])\n' +
+                'redis.call("RENAMENX",KEYS[5],theLocal)\n' +
+                'redis.call("RENAMENX",theLocal,"thenewkey")\n' +
+                'redis.call("RENAMENX",theLocal,KEYS[6])\n' +
+                'redis.call("RENAMENX",theLocal,theLocal)\n'
+    }
+
     def "hgetAll"() {
         given:
         def arg = newKeyArgument('arg')

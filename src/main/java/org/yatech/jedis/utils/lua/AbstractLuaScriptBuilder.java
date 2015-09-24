@@ -381,6 +381,30 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
     }
 
     @Override
+    public BuilderType renamenx(String key, String newKey) {
+        add(redisCallStatement("RENAMENX", arguments(stringValue(key), stringValue(newKey))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType renamenx(String key, LuaValue<String> newKey) {
+        add(redisCallStatement("RENAMENX", arguments(stringValue(key), argument(newKey))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType renamenx(LuaValue<String> key, String newKey) {
+        add(redisCallStatement("RENAMENX", arguments(argument(key), stringValue(newKey))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType renamenx(LuaValue<String> key, LuaValue<String> newKey) {
+        add(redisCallStatement("RENAMENX", arguments(argument(key), argument(newKey))));
+        return thisBuilder();
+    }
+
+    @Override
     public LuaLocalArray hgetAll(String key) {
         LuaAstLocalDeclaration local = declareNewLocal();
         add(assignment(local, redisCall("HGETALL", arguments(stringValue(key)))));

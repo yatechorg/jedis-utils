@@ -330,6 +330,37 @@ public interface JedisCommands<VoidReturnType> {
      */
     VoidReturnType rename(LuaValue<String> key, LuaValue<String> newKey);
 
+    // RENAMENX
+
+    /**
+     * Rename a key, only if the new key does not exist
+     * @param key
+     * @param newKey
+     * @return
+     */
+    VoidReturnType renamenx(String key, String newKey);
+    /**
+     * Rename a key, only if the new key does not exist
+     * @param key
+     * @param newKey
+     * @return
+     */
+    VoidReturnType renamenx(String key, LuaValue<String> newKey);
+    /**
+     * Rename a key, only if the new key does not exist
+     * @param key
+     * @param newKey
+     * @return
+     */
+    VoidReturnType renamenx(LuaValue<String> key, String newKey);
+    /**
+     * Rename a key, only if the new key does not exist
+     * @param key
+     * @param newKey
+     * @return
+     */
+    VoidReturnType renamenx(LuaValue<String> key, LuaValue<String> newKey);
+
     // +------+
     // | HASH |
     // +------+
