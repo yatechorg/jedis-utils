@@ -68,7 +68,7 @@ builder<span class="pl-k">.</span>select(<span class="pl-c1">1</span>);
 script<span class="pl-k">.</span>exec(jedis);</pre></div>
 
 <p>It is also possible to create prepared scripts with arguments and with some control statements.
-For example (Groovy):</p>
+For example (this time in Groovy):</p>
 
 <div class="highlight highlight-source-groovy"><pre><span class="pl-k">import static</span> <span class="pl-smi">org.yatech.jedis.utils.lua.LuaScriptBuilder.*</span>
 <span class="pl-k">import static</span> <span class="pl-smi">org.yatech.jedis.utils.lua.LuaConditoins.*</span>
@@ -77,34 +77,34 @@ For example (Groovy):</p>
 
 <span class="pl-k">def</span> key1 <span class="pl-k">=</span> newKeyArgument(<span class="pl-s"><span class="pl-pds">'</span>key1<span class="pl-pds">'</span></span>)
 <span class="pl-k">def</span> key2 <span class="pl-k">=</span> newKeyArgument(<span class="pl-s"><span class="pl-pds">'</span>key2<span class="pl-pds">'</span></span>)
-<span class="pl-k">def</span> member1 <span class="pl-k">=</span> newStringValueArgument(<span class="pl-s"><span class="pl-pds">'</span>member1<span class="pl-pds">'</span></span>)
+<span class="pl-k">def</span> member <span class="pl-k">=</span> newStringValueArgument(<span class="pl-s"><span class="pl-pds">'</span>member<span class="pl-pds">'</span></span>)
 <span class="pl-k">def</span> score <span class="pl-k">=</span> newDoubleValueArgument(<span class="pl-s"><span class="pl-pds">'</span>score<span class="pl-pds">'</span></span>)
 <span class="pl-k">def</span> db0 <span class="pl-k">=</span> newIntValueArgument(<span class="pl-s"><span class="pl-pds">'</span>db0<span class="pl-pds">'</span></span>)
 <span class="pl-k">def</span> db1 <span class="pl-k">=</span> newIntValueArgument(<span class="pl-s"><span class="pl-pds">'</span>db1<span class="pl-pds">'</span></span>)
 
-<span class="pl-k">def</span> builder <span class="pl-k">=</span> startScript()
-builder<span class="pl-k">.</span>select(db0)
-<span class="pl-k">def</span> data <span class="pl-k">=</span> builder<span class="pl-k">.</span>hgetAll(key1)
-builder<span class="pl-k">.</span>select(db1)
-<span class="pl-k">def</span> existingScore <span class="pl-k">=</span> builder<span class="pl-k">.</span>zscore(key2, member1)
-builder<span class="pl-k">.</span>ifCondition(isNull(existingScore))<span class="pl-k">.</span>then(
-        startBlock(builder)
-        .zadd(key2, score, member1)
-        .endBlock())
-    .endIf()
-.hmset(key1, data)
-.select(db0)
-.del(key1)
-<span class="pl-k">def</span> preparedScript <span class="pl-k">=</span> builder<span class="pl-k">.</span>endPreparedScript()
+<span class="pl-k">def</span> script <span class="pl-k">=</span> startScript()<span class="pl-k">.</span>with {
+    select(db0)
+    <span class="pl-k">def</span> payload <span class="pl-k">=</span> hgetAll(key1)
+    select(db1)
+    <span class="pl-k">def</span> existingScore <span class="pl-k">=</span> zscore(key2, member)
+    ifCondition(isNull(existingScore))<span class="pl-k">.</span>then(startBlock(it)<span class="pl-k">.</span>with {
+        zadd(key2, score, member)
+        endBlock()
+    })<span class="pl-k">.</span>endIf()
+    hmset(key1, payload)
+    select(db0)
+    del(key1)
+    endPreparedScript()
+}
 
-preparedScript<span class="pl-k">.</span>setKeyArgument(<span class="pl-s"><span class="pl-pds">'</span>key1<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>myhash1<span class="pl-pds">'</span></span>)
-preparedScript<span class="pl-k">.</span>setKeyArgument(<span class="pl-s"><span class="pl-pds">'</span>key2<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>myzset1<span class="pl-pds">'</span></span>)
-preparedScript<span class="pl-k">.</span>setValueArgument(<span class="pl-s"><span class="pl-pds">'</span>db0<span class="pl-pds">'</span></span>,<span class="pl-c1">7</span>)
-preparedScript<span class="pl-k">.</span>setValueArgument(<span class="pl-s"><span class="pl-pds">'</span>db1<span class="pl-pds">'</span></span>,<span class="pl-c1">8</span>)
-preparedScript<span class="pl-k">.</span>setValueArgument(<span class="pl-s"><span class="pl-pds">'</span>member1<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>thefirstmember<span class="pl-pds">'</span></span>)
-preparedScript<span class="pl-k">.</span>setValueArgument(<span class="pl-s"><span class="pl-pds">'</span>score<span class="pl-pds">'</span></span>,<span class="pl-c1">1.234</span>)
+script<span class="pl-k">.</span>setKeyArgument(<span class="pl-s"><span class="pl-pds">'</span>key1<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>myhash1<span class="pl-pds">'</span></span>)
+script<span class="pl-k">.</span>setKeyArgument(<span class="pl-s"><span class="pl-pds">'</span>key2<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>myzset1<span class="pl-pds">'</span></span>)
+script<span class="pl-k">.</span>setValueArgument(<span class="pl-s"><span class="pl-pds">'</span>db0<span class="pl-pds">'</span></span>,<span class="pl-c1">7</span>)
+script<span class="pl-k">.</span>setValueArgument(<span class="pl-s"><span class="pl-pds">'</span>db1<span class="pl-pds">'</span></span>,<span class="pl-c1">8</span>)
+script<span class="pl-k">.</span>setValueArgument(<span class="pl-s"><span class="pl-pds">'</span>member<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>thefirstmember<span class="pl-pds">'</span></span>)
+script<span class="pl-k">.</span>setValueArgument(<span class="pl-s"><span class="pl-pds">'</span>score<span class="pl-pds">'</span></span>,<span class="pl-c1">1.234</span>)
 <span class="pl-k">Jedis</span> jedis <span class="pl-k">=</span> <span class="pl-k">..</span>.
-preparedScript<span class="pl-k">.</span>exec(jedis)</pre></div>
+script<span class="pl-k">.</span>exec(jedis)</pre></div>
 
 <h2>
 <a id="javadoc" class="anchor" href="#javadoc" aria-hidden="true"><span class="octicon octicon-link"></span></a>Javadoc</h2>
