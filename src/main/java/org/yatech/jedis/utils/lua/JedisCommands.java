@@ -245,6 +245,37 @@ public interface JedisCommands<VoidReturnType> {
      */
     VoidReturnType pexpire(LuaValue<String> key, LuaValue<Long> milliseconds);
 
+    // PEXPIREAT
+
+    /**
+     * Set the expiration for a key as a UNIX timestamp specified in milliseconds
+     * @param key
+     * @param timestamp
+     * @return
+     */
+    VoidReturnType pexpireAt(String key, long timestamp);
+    /**
+     * Set the expiration for a key as a UNIX timestamp specified in milliseconds
+     * @param key
+     * @param timestamp
+     * @return
+     */
+    VoidReturnType pexpireAt(String key, LuaValue<Long> timestamp);
+    /**
+     * Set the expiration for a key as a UNIX timestamp specified in milliseconds
+     * @param key
+     * @param timestamp
+     * @return
+     */
+    VoidReturnType pexpireAt(LuaValue<String> key, long timestamp);
+    /**
+     * Set the expiration for a key as a UNIX timestamp specified in milliseconds
+     * @param key
+     * @param timestamp
+     * @return
+     */
+    VoidReturnType pexpireAt(LuaValue<String> key, LuaValue<Long> timestamp);
+
     // +------+
     // | HASH |
     // +------+

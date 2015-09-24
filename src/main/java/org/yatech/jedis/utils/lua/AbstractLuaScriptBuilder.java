@@ -312,6 +312,30 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
     }
 
     @Override
+    public BuilderType pexpireAt(String key, long timestamp) {
+        add(redisCallStatement("PEXPIREAT", arguments(stringValue(key), longValue(timestamp))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType pexpireAt(String key, LuaValue<Long> timestamp) {
+        add(redisCallStatement("PEXPIREAT", arguments(stringValue(key), argument(timestamp))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType pexpireAt(LuaValue<String> key, long timestamp) {
+        add(redisCallStatement("PEXPIREAT", arguments(argument(key), longValue(timestamp))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType pexpireAt(LuaValue<String> key, LuaValue<Long> timestamp) {
+        add(redisCallStatement("PEXPIREAT", arguments(argument(key), argument(timestamp))));
+        return thisBuilder();
+    }
+
+    @Override
     public LuaLocalArray hgetAll(String key) {
         LuaAstLocalDeclaration local = declareNewLocal();
         add(assignment(local, redisCall("HGETALL", arguments(stringValue(key)))));

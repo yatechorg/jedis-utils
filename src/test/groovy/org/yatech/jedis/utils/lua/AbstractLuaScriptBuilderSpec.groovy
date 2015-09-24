@@ -300,6 +300,37 @@ class AbstractLuaScriptBuilderSpec extends Specification {
                 'redis.call("PEXPIRE",theLocal,theLocal)\n'
     }
 
+    def "pexpireAt"() {
+        given:
+        def keyArg = newKeyArgument('keyArg')
+        def tsArg = newLongValueArgument('tsArg')
+        def local = new LuaLocalValue('theLocal')
+
+        when:
+        def script = build { AbstractLuaScriptBuilder builder -> builder.with {
+            pexpireAt('thekey', 7L)
+            pexpireAt('thekey', tsArg)
+            pexpireAt('thekey', local)
+            pexpireAt(keyArg, 7L)
+            pexpireAt(keyArg, tsArg)
+            pexpireAt(keyArg, local)
+            pexpireAt(local, 7L)
+            pexpireAt(local, tsArg)
+            pexpireAt(local, local)
+        }}
+
+        then:
+        script == 'redis.call("PEXPIREAT","thekey",7)\n' +
+                'redis.call("PEXPIREAT","thekey",ARGV[1])\n' +
+                'redis.call("PEXPIREAT","thekey",theLocal)\n' +
+                'redis.call("PEXPIREAT",KEYS[1],7)\n' +
+                'redis.call("PEXPIREAT",KEYS[2],ARGV[2])\n' +
+                'redis.call("PEXPIREAT",KEYS[3],theLocal)\n' +
+                'redis.call("PEXPIREAT",theLocal,7)\n' +
+                'redis.call("PEXPIREAT",theLocal,ARGV[3])\n' +
+                'redis.call("PEXPIREAT",theLocal,theLocal)\n'
+    }
+
     def "hgetAll"() {
         given:
         def arg = newKeyArgument('arg')
