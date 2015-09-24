@@ -91,6 +91,37 @@ public interface JedisCommands<VoidReturnType> {
      */
     VoidReturnType del(LuaValue<String> key);
 
+    // EXPIRE
+
+    /**
+     * Set a key's time to live in seconds
+     * @param key
+     * @param seconds
+     * @return
+     */
+    VoidReturnType expire(String key, int seconds);
+    /**
+     * Set a key's time to live in seconds
+     * @param key
+     * @param seconds
+     * @return
+     */
+    VoidReturnType expire(String key, LuaValue<Integer> seconds);
+    /**
+     * Set a key's time to live in seconds
+     * @param key
+     * @param seconds
+     * @return
+     */
+    VoidReturnType expire(LuaValue<String> key, int seconds);
+    /**
+     * Set a key's time to live in seconds
+     * @param key
+     * @param seconds
+     * @return
+     */
+    VoidReturnType expire(LuaValue<String> key, LuaValue<Integer> seconds);
+
     // +------+
     // | HASH |
     // +------+

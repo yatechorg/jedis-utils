@@ -180,6 +180,30 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
     }
 
     @Override
+    public BuilderType expire(String key, int seconds) {
+        add(redisCallStatement("EXPIRE", arguments(stringValue(key), intValue(seconds))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType expire(String key, LuaValue<Integer> seconds) {
+        add(redisCallStatement("EXPIRE", arguments(stringValue(key), argument(seconds))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType expire(LuaValue<String> key, int seconds) {
+        add(redisCallStatement("EXPIRE", arguments(argument(key), intValue(seconds))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType expire(LuaValue<String> key, LuaValue<Integer> seconds) {
+        add(redisCallStatement("EXPIRE", arguments(argument(key), argument(seconds))));
+        return thisBuilder();
+    }
+
+    @Override
     public LuaLocalArray hgetAll(String key) {
         LuaAstLocalDeclaration local = declareNewLocal();
         add(assignment(local, redisCall("HGETALL", arguments(stringValue(key)))));

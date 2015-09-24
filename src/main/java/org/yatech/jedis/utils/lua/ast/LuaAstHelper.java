@@ -28,12 +28,16 @@ public class LuaAstHelper {
         return new LuaAstAssignmentStatement(local, expression);
     }
 
-    public static LuaAstStringValue stringValue(String key) {
-        return new LuaAstStringValue(key);
+    public static LuaAstStringValue stringValue(String value) {
+        return new LuaAstStringValue(value);
     }
 
-    public static LuaAstDoubleValue doubleValue(double score) {
-        return new LuaAstDoubleValue(score);
+    public static LuaAstIntValue intValue(int value) {
+        return new LuaAstIntValue(value);
+    }
+
+    public static LuaAstDoubleValue doubleValue(double value) {
+        return new LuaAstDoubleValue(value);
     }
 
     public static LuaAstLocalDeclaration declareLocal(String name) {
