@@ -251,6 +251,24 @@ class AbstractLuaScriptBuilderSpec extends Specification {
                 'redis.call("MOVE",theLocal,theLocal)\n'
     }
 
+    def "persist"() {
+        given:
+        def arg = newKeyArgument('arg')
+        def local = new LuaLocalValue('theLocal')
+
+        when:
+        def script = build { AbstractLuaScriptBuilder builder -> builder.with {
+            persist('thekey')
+            persist(arg)
+            persist(local)
+        }}
+
+        then:
+        script == 'redis.call("PERSIST","thekey")\n' +
+                'redis.call("PERSIST",KEYS[1])\n' +
+                'redis.call("PERSIST",theLocal)\n'
+    }
+
     def "hgetAll"() {
         given:
         def arg = newKeyArgument('arg')

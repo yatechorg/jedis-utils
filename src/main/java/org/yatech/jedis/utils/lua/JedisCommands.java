@@ -199,6 +199,21 @@ public interface JedisCommands<VoidReturnType> {
      */
     VoidReturnType move(LuaValue<String> key, LuaValue<Integer> db);
 
+    // DEL
+
+    /**
+     * Remove the expiration from a key
+     * @param key
+     * @return
+     */
+    VoidReturnType persist(String key);
+    /**
+     * Remove the expiration from a key
+     * @param key
+     * @return
+     */
+    VoidReturnType persist(LuaValue<String> key);
+
     // +------+
     // | HASH |
     // +------+

@@ -276,6 +276,18 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
     }
 
     @Override
+    public BuilderType persist(String key) {
+        add(redisCallStatement("PERSIST", arguments(stringValue(key))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType persist(LuaValue<String> key) {
+        add(redisCallStatement("PERSIST", arguments(argument(key))));
+        return thisBuilder();
+    }
+
+    @Override
     public LuaLocalArray hgetAll(String key) {
         LuaAstLocalDeclaration local = declareNewLocal();
         add(assignment(local, redisCall("HGETALL", arguments(stringValue(key)))));
