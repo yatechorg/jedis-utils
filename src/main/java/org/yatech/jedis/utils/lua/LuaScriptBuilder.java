@@ -119,16 +119,6 @@ public class LuaScriptBuilder extends AbstractLuaScriptBuilder<LuaScriptBuilder>
         return new LuaPreparedScript(scriptText, new ArrayList<>(keyArg2AstArg.keySet()), new ArrayList<>(valueArg2AstArg.keySet()));
     }
 
-    private <T extends LuaArgument> Map<String,T> toPlaceholder2ArgMap(Map<T, LuaAstArg> arg2AstArg) {
-        Map<String,T> placeholder2ArgMap = new HashMap<>();
-        for (Map.Entry<T, LuaAstArg> entry : arg2AstArg.entrySet()) {
-            T arg = entry.getKey();
-            String placeholder = entry.getValue().getName();
-            placeholder2ArgMap.put(placeholder, arg);
-        }
-        return placeholder2ArgMap;
-    }
-
     /**
      * Start a new script block
      * @param parentBuilder the {@link LuaScriptBuilder} that the new block belongs to

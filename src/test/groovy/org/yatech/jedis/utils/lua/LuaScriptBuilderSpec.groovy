@@ -10,6 +10,7 @@ import static org.yatech.jedis.utils.lua.LuaConditions.*
 class LuaScriptBuilderSpec extends Specification {
 
     def 'Build script 1'() {
+        given:
         def builder = startScript();
         builder.select(0)
         def payload = builder.hgetAll('key1')
@@ -40,6 +41,20 @@ class LuaScriptBuilderSpec extends Specification {
                 'redis.call("SELECT",0)\n' +
                 'redis.call("DEL","key1")\n' +
                 'return\n'
+    }
+
+    def 'Build script with return value'() {
+        given:
+        def script = startScript().with{
+            endScriptReturn(get('key'))
+        }
+
+        when:
+        def scriptText = script.toString()
+
+        then:
+        scriptText == 'local local0 = redis.call("GET","key")\n' +
+                'return local0\n'
     }
 
     def 'Build prepared script 1'() {
@@ -80,6 +95,21 @@ class LuaScriptBuilderSpec extends Specification {
                 'redis.call("SELECT",ARGV[1])\n' +
                 'redis.call("DEL",KEYS[1])\n' +
                 'return\n'
+    }
+
+    def 'Build prepared script with return value'() {
+        given:
+        def key = newKeyArgument('key')
+        def script = startScript().with{
+            endPreparedScriptReturn(get(key))
+        }
+
+        when:
+        def scriptText = script.toString()
+
+        then:
+        scriptText == 'local local0 = redis.call("GET",KEYS[1])\n' +
+                'return local0\n'
     }
 
     def 'argument compatibility'() {
