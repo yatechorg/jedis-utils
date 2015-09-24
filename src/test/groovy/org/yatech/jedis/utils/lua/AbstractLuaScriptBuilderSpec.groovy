@@ -331,6 +331,29 @@ class AbstractLuaScriptBuilderSpec extends Specification {
                 'redis.call("PEXPIREAT",theLocal,theLocal)\n'
     }
 
+    def "pttl"() {
+        given:
+        def arg = newKeyArgument('arg')
+        def local = new LuaLocalValue('theLocal')
+        def ret = []
+
+        when:
+        def script = build { AbstractLuaScriptBuilder builder -> builder.with {
+            ret << pttl('thekey')
+            ret << pttl(arg)
+            ret << pttl(local)
+        }}
+
+        then:
+        script == 'local dummyLocal = redis.call("PTTL","thekey")\n' +
+                'local dummyLocal = redis.call("PTTL",KEYS[1])\n' +
+                'local dummyLocal = redis.call("PTTL",theLocal)\n'
+        ret.each {
+            assert it instanceof LuaLocalValue
+            assert it.name == 'dummyLocal'
+        }
+    }
+
     def "hgetAll"() {
         given:
         def arg = newKeyArgument('arg')

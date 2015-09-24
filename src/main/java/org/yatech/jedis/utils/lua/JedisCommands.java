@@ -276,6 +276,21 @@ public interface JedisCommands<VoidReturnType> {
      */
     VoidReturnType pexpireAt(LuaValue<String> key, LuaValue<Long> timestamp);
 
+    // PTTL
+
+    /**
+     * Get the time to live for a key in milliseconds
+     * @param key
+     * @return
+     */
+    LuaLocalValue pttl(String key);
+    /**
+     * Get the time to live for a key in milliseconds
+     * @param key
+     * @return
+     */
+    LuaLocalValue pttl(LuaValue<String> key);
+
     // +------+
     // | HASH |
     // +------+
