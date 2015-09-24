@@ -354,6 +354,23 @@ class AbstractLuaScriptBuilderSpec extends Specification {
         }
     }
 
+    def "randomKey"() {
+        given:
+        def res = []
+
+        when:
+        def script = build { AbstractLuaScriptBuilder builder -> builder.with {
+            res << randomKey()
+        }}
+
+        then:
+        script == 'local dummyLocal = redis.call("RANDOMKEY")\n'
+        res.each {
+            assert it instanceof LuaLocalValue
+            assert it.name == 'dummyLocal'
+        }
+    }
+
     def "hgetAll"() {
         given:
         def arg = newKeyArgument('arg')

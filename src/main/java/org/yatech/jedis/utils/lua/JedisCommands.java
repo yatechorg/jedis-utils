@@ -291,6 +291,14 @@ public interface JedisCommands<VoidReturnType> {
      */
     LuaLocalValue pttl(LuaValue<String> key);
 
+    // RANDOMKEY
+
+    /**
+     * Return a random key from the keyspace
+     * @return
+     */
+    LuaLocalValue randomKey();
+
     // +------+
     // | HASH |
     // +------+
