@@ -376,6 +376,21 @@ public interface JedisCommands<VoidReturnType> {
      */
     LuaLocalValue ttl(LuaValue<String> key);
 
+    // TYPE
+
+    /**
+     * Determine the type stored at key
+     * @param key
+     * @return
+     */
+    LuaLocalValue type(String key);
+    /**
+     * Determine the type stored at key
+     * @param key
+     * @return
+     */
+    LuaLocalValue type(LuaValue<String> key);
+
     // +------+
     // | HASH |
     // +------+
