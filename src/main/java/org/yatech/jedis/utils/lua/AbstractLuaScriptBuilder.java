@@ -86,6 +86,16 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
     }
 
     /**
+     * Create a new long value argument which is a place holder for int values in a {@link org.yatech.jedis.utils.lua.LuaPreparedScript}.
+     * @param argName the name of the argument
+     * @return the new argument instance
+     * @see org.yatech.jedis.utils.lua.LuaPreparedScript#setValueArgument(String, long)
+     */
+    public static LuaLongValueArgument newLongValueArgument(String argName) {
+        return new LuaLongValueArgument(argName);
+    }
+
+    /**
      * Create a new double value argument which is a place holder for double values in a {@link org.yatech.jedis.utils.lua.LuaPreparedScript}.
      * @param argName the name of the argument
      * @return the new argument instance
@@ -200,6 +210,30 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
     @Override
     public BuilderType expire(LuaValue<String> key, LuaValue<Integer> seconds) {
         add(redisCallStatement("EXPIRE", arguments(argument(key), argument(seconds))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType expireAt(String key, long timestamp) {
+        add(redisCallStatement("EXPIREAT", arguments(stringValue(key), longValue(timestamp))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType expireAt(String key, LuaValue<Long> timestamp) {
+        add(redisCallStatement("EXPIREAT", arguments(stringValue(key), argument(timestamp))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType expireAt(LuaValue<String> key, long timestamp) {
+        add(redisCallStatement("EXPIREAT", arguments(argument(key), longValue(timestamp))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType expireAt(LuaValue<String> key, LuaValue<Long> timestamp) {
+        add(redisCallStatement("EXPIREAT", arguments(argument(key), argument(timestamp))));
         return thisBuilder();
     }
 

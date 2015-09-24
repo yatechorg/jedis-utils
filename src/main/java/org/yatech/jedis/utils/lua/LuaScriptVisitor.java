@@ -102,6 +102,11 @@ class LuaScriptVisitor implements LuaAstVisitor {
     }
 
     @Override
+    public void visit(LuaAstLongValue value) {
+        append(String.valueOf(value.getValue()));
+    }
+
+    @Override
     public void visit(LuaAstDoubleValue value) {
         append(String.valueOf(value.getValue()));
     }

@@ -64,6 +64,15 @@ public class LuaPreparedScript extends LuaScript {
      * @param name the name of the argument (placeholder)
      * @param value the concrete value
      */
+    public void setValueArgument(String name, long value) {
+        name2valueArguments.get(name).setValue(value);
+    }
+
+    /**
+     * Set the concrete value for a value argument
+     * @param name the name of the argument (placeholder)
+     * @param value the concrete value
+     */
     public void setValueArgument(String name, double value) {
         name2valueArguments.get(name).setValue(value);
     }

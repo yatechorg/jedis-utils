@@ -122,6 +122,37 @@ public interface JedisCommands<VoidReturnType> {
      */
     VoidReturnType expire(LuaValue<String> key, LuaValue<Integer> seconds);
 
+    // EXPIRE
+
+    /**
+     * Set the expiration for a key as a UNIX timestamp
+     * @param key
+     * @param timestamp
+     * @return
+     */
+    VoidReturnType expireAt(String key, long timestamp);
+    /**
+     * Set the expiration for a key as a UNIX timestamp
+     * @param key
+     * @param timestamp
+     * @return
+     */
+    VoidReturnType expireAt(String key, LuaValue<Long> timestamp);
+    /**
+     * Set the expiration for a key as a UNIX timestamp
+     * @param key
+     * @param timestamp
+     * @return
+     */
+    VoidReturnType expireAt(LuaValue<String> key, long timestamp);
+    /**
+     * Set the expiration for a key as a UNIX timestamp
+     * @param key
+     * @param timestamp
+     * @return
+     */
+    VoidReturnType expireAt(LuaValue<String> key, LuaValue<Long> timestamp);
+
     // +------+
     // | HASH |
     // +------+

@@ -36,6 +36,10 @@ public class LuaAstHelper {
         return new LuaAstIntValue(value);
     }
 
+    public static LuaAstLongValue longValue(long value) {
+        return new LuaAstLongValue(value);
+    }
+
     public static LuaAstDoubleValue doubleValue(double value) {
         return new LuaAstDoubleValue(value);
     }

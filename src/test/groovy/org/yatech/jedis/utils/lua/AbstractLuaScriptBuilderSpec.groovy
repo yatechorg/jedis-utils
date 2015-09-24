@@ -166,6 +166,37 @@ class AbstractLuaScriptBuilderSpec extends Specification {
                 'redis.call("EXPIRE",theLocal,theLocal)\n'
     }
 
+    def "expireAt"() {
+        given:
+        def keyArg = newKeyArgument('keyArg')
+        def tsArg = newLongValueArgument('tsArg')
+        def local = new LuaLocalValue('theLocal')
+
+        when:
+        def script = build { AbstractLuaScriptBuilder builder -> builder.with {
+            expireAt('thekey', 7L)
+            expireAt('thekey', tsArg)
+            expireAt('thekey', local)
+            expireAt(keyArg, 7L)
+            expireAt(keyArg, tsArg)
+            expireAt(keyArg, local)
+            expireAt(local, 7L)
+            expireAt(local, tsArg)
+            expireAt(local, local)
+        }}
+
+        then:
+        script == 'redis.call("EXPIREAT","thekey",7)\n' +
+                'redis.call("EXPIREAT","thekey",ARGV[1])\n' +
+                'redis.call("EXPIREAT","thekey",theLocal)\n' +
+                'redis.call("EXPIREAT",KEYS[1],7)\n' +
+                'redis.call("EXPIREAT",KEYS[2],ARGV[2])\n' +
+                'redis.call("EXPIREAT",KEYS[3],theLocal)\n' +
+                'redis.call("EXPIREAT",theLocal,7)\n' +
+                'redis.call("EXPIREAT",theLocal,ARGV[3])\n' +
+                'redis.call("EXPIREAT",theLocal,theLocal)\n'
+    }
+
     def "hgetAll"() {
         given:
         def arg = newKeyArgument('arg')

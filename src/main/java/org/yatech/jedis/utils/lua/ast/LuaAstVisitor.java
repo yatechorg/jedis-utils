@@ -17,6 +17,7 @@ public interface LuaAstVisitor {
 
     void visit(LuaAstStringValue value);
     void visit(LuaAstIntValue value);
+    void visit(LuaAstLongValue value);
     void visit(LuaAstDoubleValue value);
 
     void visit(LuaAstArg arg);
