@@ -371,6 +371,37 @@ class AbstractLuaScriptBuilderSpec extends Specification {
         }
     }
 
+    def "rename"() {
+        given:
+        def keyArg = newKeyArgument('keyArg')
+        def newKeyArg = newKeyArgument('newKeyArg')
+        def local = new LuaLocalValue('theLocal')
+
+        when:
+        def script = build { AbstractLuaScriptBuilder builder -> builder.with {
+            rename('thekey', 'thenewkey')
+            rename('thekey', newKeyArg)
+            rename('thekey', local)
+            rename(keyArg, 'thenewkey')
+            rename(keyArg, newKeyArg)
+            rename(keyArg, local)
+            rename(local, 'thenewkey')
+            rename(local, newKeyArg)
+            rename(local, local)
+        }}
+
+        then:
+        script == 'redis.call("RENAME","thekey","thenewkey")\n' +
+                'redis.call("RENAME","thekey",KEYS[1])\n' +
+                'redis.call("RENAME","thekey",theLocal)\n' +
+                'redis.call("RENAME",KEYS[2],"thenewkey")\n' +
+                'redis.call("RENAME",KEYS[3],KEYS[4])\n' +
+                'redis.call("RENAME",KEYS[5],theLocal)\n' +
+                'redis.call("RENAME",theLocal,"thenewkey")\n' +
+                'redis.call("RENAME",theLocal,KEYS[6])\n' +
+                'redis.call("RENAME",theLocal,theLocal)\n'
+    }
+
     def "hgetAll"() {
         given:
         def arg = newKeyArgument('arg')

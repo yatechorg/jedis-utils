@@ -299,6 +299,37 @@ public interface JedisCommands<VoidReturnType> {
      */
     LuaLocalValue randomKey();
 
+    // RENAME
+
+    /**
+     * Rename a key
+     * @param key
+     * @param newKey
+     * @return
+     */
+    VoidReturnType rename(String key, String newKey);
+    /**
+     * Rename a key
+     * @param key
+     * @param newKey
+     * @return
+     */
+    VoidReturnType rename(String key, LuaValue<String> newKey);
+    /**
+     * Rename a key
+     * @param key
+     * @param newKey
+     * @return
+     */
+    VoidReturnType rename(LuaValue<String> key, String newKey);
+    /**
+     * Rename a key
+     * @param key
+     * @param newKey
+     * @return
+     */
+    VoidReturnType rename(LuaValue<String> key, LuaValue<String> newKey);
+
     // +------+
     // | HASH |
     // +------+
