@@ -140,44 +140,6 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
     }
 
     @Override
-    public BuilderType set(String key, String value) {
-        add(redisCallStatement("SET", arguments(stringValue(key), stringValue(value))));
-        return thisBuilder();
-    }
-
-    @Override
-    public BuilderType set(String key, LuaValue<String> value) {
-        add(redisCallStatement("SET", arguments(stringValue(key), argument(value))));
-        return thisBuilder();
-    }
-
-    @Override
-    public BuilderType set(LuaValue<String> key, String value) {
-        add(redisCallStatement("SET", arguments(argument(key), stringValue(value))));
-        return thisBuilder();
-    }
-
-    @Override
-    public BuilderType set(LuaValue<String> key, LuaValue<String> value) {
-        add(redisCallStatement("SET", arguments(argument(key), argument(value))));
-        return thisBuilder();
-    }
-
-    @Override
-    public LuaLocalValue get(String key) {
-        LuaAstLocalDeclaration local = declareNewLocal();
-        add(assignment(local, redisCall("GET", arguments(stringValue(key)))));
-        return new LuaLocalValue(local.getName());
-    }
-
-    @Override
-    public LuaLocalValue get(LuaValue<String> key) {
-        LuaAstLocalDeclaration local = declareNewLocal();
-        add(assignment(local, redisCall("GET", arguments(argument(key)))));
-        return new LuaLocalValue(local.getName());
-    }
-
-    @Override
     public BuilderType del(String key) {
         add(redisCallStatement("DEL", arguments(stringValue(key))));
         return thisBuilder();
@@ -468,6 +430,44 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
     public BuilderType hmset(LuaValue<String> key, LuaLocalArray hash) {
         add(redisCallStatement("HMSET", arguments(argument(key), unpackArray(hash))));
         return thisBuilder();
+    }
+
+    @Override
+    public BuilderType set(String key, String value) {
+        add(redisCallStatement("SET", arguments(stringValue(key), stringValue(value))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType set(String key, LuaValue<String> value) {
+        add(redisCallStatement("SET", arguments(stringValue(key), argument(value))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType set(LuaValue<String> key, String value) {
+        add(redisCallStatement("SET", arguments(argument(key), stringValue(value))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType set(LuaValue<String> key, LuaValue<String> value) {
+        add(redisCallStatement("SET", arguments(argument(key), argument(value))));
+        return thisBuilder();
+    }
+
+    @Override
+    public LuaLocalValue get(String key) {
+        LuaAstLocalDeclaration local = declareNewLocal();
+        add(assignment(local, redisCall("GET", arguments(stringValue(key)))));
+        return new LuaLocalValue(local.getName());
+    }
+
+    @Override
+    public LuaLocalValue get(LuaValue<String> key) {
+        LuaAstLocalDeclaration local = declareNewLocal();
+        add(assignment(local, redisCall("GET", arguments(argument(key)))));
+        return new LuaLocalValue(local.getName());
     }
 
     @Override

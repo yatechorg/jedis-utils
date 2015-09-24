@@ -30,52 +30,6 @@ public interface JedisCommands<VoidReturnType> {
     // | KEYS |
     // +------+
 
-    // SET
-
-    /**
-     * Set the string value of a key
-     * @param key
-     * @param value
-     * @return
-     */
-    VoidReturnType set(String key, String value);
-    /**
-     * Set the string value of a key
-     * @param key
-     * @param value
-     * @return
-     */
-    VoidReturnType set(String key, LuaValue<String> value);
-    /**
-     * Set the string value of a key
-     * @param key
-     * @param value
-     * @return
-     */
-    VoidReturnType set(LuaValue<String> key, String value);
-    /**
-     * Set the string value of a key
-     * @param key
-     * @param value
-     * @return
-     */
-    VoidReturnType set(LuaValue<String> key, LuaValue<String> value);
-
-    // GET
-
-    /**
-     * Get the value of a key
-     * @param key
-     * @return
-     */
-    LuaLocalValue get(String key);
-    /**
-     * Get the value of a key
-     * @param key
-     * @return
-     */
-    LuaLocalValue get(LuaValue<String> key);
-
     // DEL
 
     /**
@@ -448,6 +402,56 @@ public interface JedisCommands<VoidReturnType> {
      * @return
      */
     VoidReturnType hmset(LuaValue<String> key, LuaLocalArray hash);
+
+    // +---------+
+    // | STRINGS |
+    // +---------+
+
+    // SET
+
+    /**
+     * Set the string value of a key
+     * @param key
+     * @param value
+     * @return
+     */
+    VoidReturnType set(String key, String value);
+    /**
+     * Set the string value of a key
+     * @param key
+     * @param value
+     * @return
+     */
+    VoidReturnType set(String key, LuaValue<String> value);
+    /**
+     * Set the string value of a key
+     * @param key
+     * @param value
+     * @return
+     */
+    VoidReturnType set(LuaValue<String> key, String value);
+    /**
+     * Set the string value of a key
+     * @param key
+     * @param value
+     * @return
+     */
+    VoidReturnType set(LuaValue<String> key, LuaValue<String> value);
+
+    // GET
+
+    /**
+     * Get the value of a key
+     * @param key
+     * @return
+     */
+    LuaLocalValue get(String key);
+    /**
+     * Get the value of a key
+     * @param key
+     * @return
+     */
+    LuaLocalValue get(LuaValue<String> key);
 
     // +------+
     // | ZSET |
