@@ -1,5 +1,6 @@
 package org.yatech.jedis.utils.lua;
 
+import org.yatech.jedis.utils.lua.ast.LuaScriptConfig;
 import redis.clients.jedis.Jedis;
 
 import java.util.*;
@@ -16,8 +17,8 @@ public class LuaPreparedScript extends LuaScript {
     private final LinkedHashMap<String, LuaKeyArgument> name2keyArguments;
     private final LinkedHashMap<String, LuaValueArgument> name2valueArguments;
 
-    LuaPreparedScript(String scriptText, List<LuaKeyArgument> keyArguments, List<LuaValueArgument> valueArguments) {
-        super(scriptText);
+    LuaPreparedScript(String scriptText, List<LuaKeyArgument> keyArguments, List<LuaValueArgument> valueArguments, LuaScriptConfig config) {
+        super(scriptText, config);
         this.name2keyArguments = toArgMap(keyArguments);
         this.name2valueArguments = toArgMap(valueArguments);
     }
@@ -79,7 +80,7 @@ public class LuaPreparedScript extends LuaScript {
 
     @Override
     public Object exec(Jedis jedis) {
-        return jedis.eval(getScriptText(), toValues(name2keyArguments), toValues(name2valueArguments));
+        return exec(jedis, toValues(name2keyArguments), toValues(name2valueArguments));
     }
 
     private List<String> toValues(Map<String, ? extends LuaArgument> name2arguments) {

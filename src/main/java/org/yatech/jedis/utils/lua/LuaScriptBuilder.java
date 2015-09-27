@@ -3,6 +3,7 @@ package org.yatech.jedis.utils.lua;
 import org.yatech.jedis.utils.lua.ast.LuaAstArg;
 import org.yatech.jedis.utils.lua.ast.LuaAstReturnStatement;
 import org.yatech.jedis.utils.lua.ast.LuaAstStatement;
+import org.yatech.jedis.utils.lua.ast.LuaScriptConfig;
 
 import java.util.*;
 
@@ -70,14 +71,35 @@ public class LuaScriptBuilder extends AbstractLuaScriptBuilder<LuaScriptBuilder>
 
     /**
      * End building the script
+     * @param config the configuration for the script to build
      * @return the new {@link LuaScript} instance
      */
-    public LuaScript endScript() {
+    public LuaScript endScript(LuaScriptConfig config) {
         if (!endsWithReturnStatement()) {
             add(new LuaAstReturnStatement());
         }
         String scriptText = buildScriptText();
-        return new LuaScript(scriptText);
+        return new LuaScript(scriptText, config);
+    }
+
+    /**
+     * End building the script
+     * @return the new {@link LuaScript} instance
+     */
+    public LuaScript endScript() {
+        return endScript(LuaScriptConfig.DEFAULT);
+    }
+
+    /**
+     * End building the script, adding a return value statement
+     * @param config the configuration for the script to build
+     * @param value the value to return
+     * @return the new {@link LuaScript} instance
+     */
+    public LuaScript endScriptReturn(LuaValue value, LuaScriptConfig config) {
+        add(new LuaAstReturnStatement(argument(value)));
+        String scriptText = buildScriptText();
+        return new LuaScript(scriptText, config);
     }
 
     /**
@@ -86,9 +108,7 @@ public class LuaScriptBuilder extends AbstractLuaScriptBuilder<LuaScriptBuilder>
      * @return the new {@link LuaScript} instance
      */
     public LuaScript endScriptReturn(LuaValue value) {
-        add(new LuaAstReturnStatement(argument(value)));
-        String scriptText = buildScriptText();
-        return new LuaScript(scriptText);
+        return endScriptReturn(value, LuaScriptConfig.DEFAULT);
     }
 
     private boolean endsWithReturnStatement() {
@@ -98,14 +118,35 @@ public class LuaScriptBuilder extends AbstractLuaScriptBuilder<LuaScriptBuilder>
 
     /**
      * End building the prepared script
+     * @param config the configuration for the script to build
      * @return the new {@link LuaPreparedScript} instance
      */
-    public LuaPreparedScript endPreparedScript() {
+    public LuaPreparedScript endPreparedScript(LuaScriptConfig config) {
         if (!endsWithReturnStatement()) {
             add(new LuaAstReturnStatement());
         }
         String scriptText = buildScriptText();
-        return new LuaPreparedScript(scriptText, new ArrayList<>(keyArg2AstArg.keySet()), new ArrayList<>(valueArg2AstArg.keySet()));
+        return new LuaPreparedScript(scriptText, new ArrayList<>(keyArg2AstArg.keySet()), new ArrayList<>(valueArg2AstArg.keySet()), config);
+    }
+
+    /**
+     * End building the prepared script
+     * @return the new {@link LuaPreparedScript} instance
+     */
+    public LuaPreparedScript endPreparedScript() {
+        return endPreparedScript(LuaScriptConfig.DEFAULT);
+    }
+
+    /**
+     * End building the prepared script, adding a return value statement
+     * @param value the value to return
+     * @param config the configuration for the script to build
+     * @return the new {@link LuaPreparedScript} instance
+     */
+    public LuaPreparedScript endPreparedScriptReturn(LuaValue value, LuaScriptConfig config) {
+        add(new LuaAstReturnStatement(argument(value)));
+        String scriptText = buildScriptText();
+        return new LuaPreparedScript(scriptText, new ArrayList<>(keyArg2AstArg.keySet()), new ArrayList<>(valueArg2AstArg.keySet()), config);
     }
 
     /**
@@ -114,9 +155,7 @@ public class LuaScriptBuilder extends AbstractLuaScriptBuilder<LuaScriptBuilder>
      * @return the new {@link LuaPreparedScript} instance
      */
     public LuaPreparedScript endPreparedScriptReturn(LuaValue value) {
-        add(new LuaAstReturnStatement(argument(value)));
-        String scriptText = buildScriptText();
-        return new LuaPreparedScript(scriptText, new ArrayList<>(keyArg2AstArg.keySet()), new ArrayList<>(valueArg2AstArg.keySet()));
+        return endPreparedScriptReturn(value, LuaScriptConfig.DEFAULT);
     }
 
     /**

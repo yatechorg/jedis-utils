@@ -1,5 +1,8 @@
 package org.yatech.jedis.utils.lua
 
+import redis.clients.jedis.exceptions.JedisDataException
+
+import static org.yatech.jedis.utils.lua.AbstractLuaScriptBuilder.newKeyArgument
 import static org.yatech.jedis.utils.lua.LuaConditions.isNull
 import static org.yatech.jedis.utils.lua.LuaScriptBuilder.startScript
 
@@ -89,6 +92,52 @@ class LuaScriptIntegrationSpec extends BaseIntegrationSpec {
 
         then:
         res == '1.23'
+    }
+
+    def 'use scripts cache, NOSCRIPT exception is handled'() {
+        given:
+        def key = newKeyArgument('key')
+        def script = startScript().with {
+            endPreparedScriptReturn(get(key))
+        }
+        jedis.set('k1', 'v1')
+        jedis.set('k2', 'v2')
+
+        when:
+        script.setKeyArgument('key', 'k1')
+        def res = script.exec(jedis)
+        then:
+        res == 'v1'
+
+        when:
+        jedis.scriptFlush()
+        script.setKeyArgument('key', 'k2')
+        res = script.exec(jedis)
+        then:
+        res == 'v2'
+    }
+
+    def 'use scripts cache, non NOSCRIPT exception is thrown'() {
+        given:
+        def key = newKeyArgument('key')
+        def script = startScript().with {
+            endPreparedScriptReturn(hgetAll(key))
+        }
+        jedis.set('k1', 'v1')
+        jedis.hmset('k2', [hk2:'v2'])
+
+        when:
+        script.setKeyArgument('key', 'k2')
+        def res = script.exec(jedis)
+        then:
+        res == ['hk2', 'v2']
+
+        when:
+        script.setKeyArgument('key', 'k1')
+        script.exec(jedis)
+        then:
+        def e = thrown(JedisDataException)
+        e.message.contains('WRONGTYPE')
     }
 
 }
