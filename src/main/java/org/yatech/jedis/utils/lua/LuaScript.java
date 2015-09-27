@@ -25,10 +25,6 @@ public class LuaScript {
         this.scriptText = scriptText;
     }
 
-    protected String getScriptText() {
-        return scriptText;
-    }
-
     /**
      * Execute this script using the given Jedis connection
      * @param jedis the Jedis connection to use
