@@ -10,6 +10,7 @@ A builder facility for building lua scripts to be executed in Redis using Jedis.
 The builder uses an API similar to the API provided by Jedis. 
 
 For example:
+
 ```java
 import static org.yatech.jedis.utils.lua.LuaScriptBuilder.*;
 import org.yatech.jedis.utils.lua.LuaScriptBuilder;
@@ -33,6 +34,7 @@ script.exec(jedis);
 
 It is also possible to create prepared scripts with arguments and with some control statements.
 For example (this time in Groovy):
+
 ```groovy
 import static org.yatech.jedis.utils.lua.LuaScriptBuilder.*
 import static org.yatech.jedis.utils.lua.LuaConditoins.*
