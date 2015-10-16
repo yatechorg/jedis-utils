@@ -49,6 +49,71 @@ class AbstractLuaScriptBuilderSpec extends Specification {
         arg.value == null
     }
 
+    def "assign"() {
+        given:
+        def arg1 = newKeyArgument('arg1')
+        def arg2 = newStringValueArgument('arg2')
+        def arg3 = newIntValueArgument('arg3')
+        def arg4 = newDoubleValueArgument('arg4')
+        def arg5 = newLongValueArgument('arg5')
+        def local1 = new LuaLocalValue('theLocal1')
+        def local2 = new LuaLocalValue('theLocal2')
+        def local3 = new LuaLocalArray('theLocal3')
+        def local4 = new LuaLocalArray('theLocal4')
+
+        when:
+        def script = build { AbstractLuaScriptBuilder builder ->
+            builder.with {
+                assign(local1, 1)
+                assign(local1, 77L)
+                assign(local1, 'hello')
+                assign(local1, 1.17)
+                assign(local1, arg1)
+                assign(local1, arg2)
+                assign(local1, arg3)
+                assign(local1, arg4)
+                assign(local1, arg5)
+                assign(local1, local2)
+                assign(local1, local3)
+                assign(local3, 5)
+                assign(local3, 99L)
+                assign(local3, 'world')
+                assign(local3, 3.1415)
+                assign(local3, arg1)
+                assign(local3, arg2)
+                assign(local3, arg3)
+                assign(local3, arg4)
+                assign(local3, arg5)
+                assign(local3, local2)
+                assign(local3, local4)
+            }
+        }
+
+        then:
+        script =='theLocal1 = 1\n' +
+                'theLocal1 = 77\n' +
+                'theLocal1 = "hello"\n' +
+                'theLocal1 = 1.17\n' +
+                'theLocal1 = KEYS[1]\n' +
+                'theLocal1 = ARGV[1]\n' +
+                'theLocal1 = ARGV[2]\n' +
+                'theLocal1 = ARGV[3]\n' +
+                'theLocal1 = ARGV[4]\n' +
+                'theLocal1 = theLocal2\n' +
+                'theLocal1 = theLocal3\n' +
+                'theLocal3 = 5\n' +
+                'theLocal3 = 99\n' +
+                'theLocal3 = "world"\n' +
+                'theLocal3 = 3.1415\n' +
+                'theLocal3 = KEYS[2]\n' +
+                'theLocal3 = ARGV[5]\n' +
+                'theLocal3 = ARGV[6]\n' +
+                'theLocal3 = ARGV[7]\n' +
+                'theLocal3 = ARGV[8]\n' +
+                'theLocal3 = theLocal2\n' +
+                'theLocal3 = theLocal4\n'
+    }
+
     def "select"() {
         given:
         def arg = newIntValueArgument('arg')

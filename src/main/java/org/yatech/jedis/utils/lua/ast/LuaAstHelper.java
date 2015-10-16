@@ -28,6 +28,10 @@ public class LuaAstHelper {
         return new LuaAstAssignmentStatement(local, expression);
     }
 
+    public static LuaAstAssignmentStatement assignment(LuaAstLocal local, LuaAstExpression expression) {
+        return new LuaAstAssignmentStatement(local, expression);
+    }
+
     public static LuaAstStringValue stringValue(String value) {
         return new LuaAstStringValue(value);
     }

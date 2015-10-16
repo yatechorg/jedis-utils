@@ -125,11 +125,79 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
         return new LuaIfStatementBuilder<BuilderType>(this, condition);
     }
 
+    // *** Assignment ***
+
+    /**
+     * Assign a value to an existing local
+     * @param local the local to which to assign the value
+     * @param value the value to assign
+     * @return this builder
+     */
+    public BuilderType assign(LuaLocal local, LuaValue value) {
+        add(assignment(local(local.getName()), argument(value)));
+        return thisBuilder();
+    }
+
+    /**
+     * Assign a value to an existing local
+     * @param local the local to which to assign the value
+     * @param value the value to assign
+     * @return this builder
+     */
+    public BuilderType assign(LuaLocal local, LuaLocal value) {
+        add(assignment(local(local.getName()), argument(value)));
+        return thisBuilder();
+    }
+
+    /**
+     * Assign a value to an existing local
+     * @param local the local to which to assign the value
+     * @param value the value to assign
+     * @return this builder
+     */
+    public BuilderType assign(LuaLocal local, int value) {
+        add(assignment(local(local.getName()), intValue(value)));
+        return thisBuilder();
+    }
+
+    /**
+     * Assign a value to an existing local
+     * @param local the local to which to assign the value
+     * @param value the value to assign
+     * @return this builder
+     */
+    public BuilderType assign(LuaLocal local, long value) {
+        add(assignment(local(local.getName()), longValue(value)));
+        return thisBuilder();
+    }
+
+    /**
+     * Assign a value to an existing local
+     * @param local the local to which to assign the value
+     * @param value the value to assign
+     * @return this builder
+     */
+    public BuilderType assign(LuaLocal local, double value) {
+        add(assignment(local(local.getName()), doubleValue(value)));
+        return thisBuilder();
+    }
+
+    /**
+     * Assign a value to an existing local
+     * @param local the local to which to assign the value
+     * @param value the value to assign
+     * @return this builder
+     */
+    public BuilderType assign(LuaLocal local, String value) {
+        add(assignment(local(local.getName()), stringValue(value)));
+        return thisBuilder();
+    }
+
     // *** Jedis Commands ***
 
     @Override
     public BuilderType select(int index) {
-        add(redisCallStatement("SELECT", arguments(new LuaAstIntValue(index))));
+        add(redisCallStatement("SELECT", arguments(intValue(index))));
         return thisBuilder();
     }
 
