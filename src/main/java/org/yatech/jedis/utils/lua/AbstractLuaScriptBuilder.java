@@ -3,6 +3,8 @@ package org.yatech.jedis.utils.lua;
 import org.yatech.jedis.utils.lua.ast.*;
 import static org.yatech.jedis.utils.lua.ast.LuaAstHelper.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -460,6 +462,54 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
         LuaAstLocalDeclaration local = declareNewLocal();
         add(assignment(local, redisCall("TYPE", arguments(argument(key)))));
         return new LuaLocalValue(local.getName());
+    }
+
+    @Override
+    public BuilderType hdel(String key, String field, String... moreFields) {
+        List<LuaAstExpression> arguments = new ArrayList<>();
+        arguments.add(stringValue(key));
+        arguments.add(stringValue(field));
+        for (String f : moreFields) {
+            arguments.add(stringValue(f));
+        }
+        add(redisCallStatement("HDEL", arguments));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType hdel(String key, LuaValue<String> field, LuaValue<String>... moreFields) {
+        List<LuaAstExpression> arguments = new ArrayList<>();
+        arguments.add(stringValue(key));
+        arguments.add(argument(field));
+        for (LuaValue<String> f : moreFields) {
+            arguments.add(argument(f));
+        }
+        add(redisCallStatement("HDEL", arguments));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType hdel(LuaValue<String> key, String field, String... moreFields) {
+        List<LuaAstExpression> arguments = new ArrayList<>();
+        arguments.add(argument(key));
+        arguments.add(stringValue(field));
+        for (String f : moreFields) {
+            arguments.add(stringValue(f));
+        }
+        add(redisCallStatement("HDEL", arguments));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType hdel(LuaValue<String> key, LuaValue<String> field, LuaValue<String>... moreFields) {
+        List<LuaAstExpression> arguments = new ArrayList<>();
+        arguments.add(argument(key));
+        arguments.add(argument(field));
+        for (LuaValue<String> f : moreFields) {
+            arguments.add(argument(f));
+        }
+        add(redisCallStatement("HDEL", arguments));
+        return thisBuilder();
     }
 
     @Override

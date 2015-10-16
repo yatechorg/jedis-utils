@@ -349,6 +349,41 @@ public interface JedisCommands<VoidReturnType> {
     // | HASH |
     // +------+
 
+    // HDEL
+
+    /**
+     * Delete one or more hash fields
+     * @param key
+     * @param field
+     * @param moreFields
+     * @return
+     */
+    VoidReturnType hdel(String key, String field, String... moreFields);
+    /**
+     * Delete one or more hash fields
+     * @param key
+     * @param field
+     * @param moreFields
+     * @return
+     */
+    VoidReturnType hdel(String key, LuaValue<String> field, LuaValue<String>... moreFields);
+    /**
+     * Delete one or more hash fields
+     * @param key
+     * @param field
+     * @param moreFields
+     * @return
+     */
+    VoidReturnType hdel(LuaValue<String> key, String field, String... moreFields);
+    /**
+     * Delete one or more hash fields
+     * @param key
+     * @param field
+     * @param moreFields
+     * @return
+     */
+    VoidReturnType hdel(LuaValue<String> key, LuaValue<String> field, LuaValue<String>... moreFields);
+
     // HGETALL
 
     /**

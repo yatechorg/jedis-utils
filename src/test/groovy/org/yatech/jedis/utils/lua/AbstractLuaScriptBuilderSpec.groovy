@@ -544,6 +544,58 @@ class AbstractLuaScriptBuilderSpec extends Specification {
         }
     }
 
+    def "hdel"() {
+        given:
+        def keyArg = newKeyArgument('key')
+        def strArg = newStringValueArgument('arg')
+        def local1 = new LuaLocalValue('theLocal1')
+        def local2 = new LuaLocalValue('theLocal2')
+
+        when:
+        def script = build { AbstractLuaScriptBuilder builder ->
+            builder.with {
+                hdel('thekey', 'field1')
+                hdel('thekey', 'field1', 'field2')
+                hdel('thekey', 'field1', 'field2', 'field3')
+                hdel('thekey', strArg)
+                hdel('thekey', strArg, local1)
+                hdel('thekey', local1, strArg, local2)
+                hdel(keyArg, 'field1')
+                hdel(keyArg, 'field1', 'field2')
+                hdel(keyArg, 'field1', 'field2', 'field3')
+                hdel(keyArg, strArg)
+                hdel(keyArg, strArg, local1)
+                hdel(keyArg, local1, strArg, local2)
+                hdel(local1, 'field1')
+                hdel(local1, 'field1', 'field2')
+                hdel(local1, 'field1', 'field2', 'field3')
+                hdel(local1, strArg)
+                hdel(local1, strArg, local1)
+                hdel(local1, local1, strArg, local2)
+            }
+        }
+
+        then:
+        script == 'redis.call("HDEL","thekey","field1")\n' +
+                'redis.call("HDEL","thekey","field1","field2")\n' +
+                'redis.call("HDEL","thekey","field1","field2","field3")\n' +
+                'redis.call("HDEL","thekey",ARGV[1])\n' +
+                'redis.call("HDEL","thekey",ARGV[2],theLocal1)\n' +
+                'redis.call("HDEL","thekey",theLocal1,ARGV[3],theLocal2)\n' +
+                'redis.call("HDEL",KEYS[1],"field1")\n' +
+                'redis.call("HDEL",KEYS[2],"field1","field2")\n' +
+                'redis.call("HDEL",KEYS[3],"field1","field2","field3")\n' +
+                'redis.call("HDEL",KEYS[4],ARGV[4])\n' +
+                'redis.call("HDEL",KEYS[5],ARGV[5],theLocal1)\n' +
+                'redis.call("HDEL",KEYS[6],theLocal1,ARGV[6],theLocal2)\n' +
+                'redis.call("HDEL",theLocal1,"field1")\n' +
+                'redis.call("HDEL",theLocal1,"field1","field2")\n' +
+                'redis.call("HDEL",theLocal1,"field1","field2","field3")\n' +
+                'redis.call("HDEL",theLocal1,ARGV[7])\n' +
+                'redis.call("HDEL",theLocal1,ARGV[8],theLocal1)\n' +
+                'redis.call("HDEL",theLocal1,theLocal1,ARGV[9],theLocal2)\n'
+    }
+
     def "hgetAll"() {
         given:
         def arg = newKeyArgument('arg')
