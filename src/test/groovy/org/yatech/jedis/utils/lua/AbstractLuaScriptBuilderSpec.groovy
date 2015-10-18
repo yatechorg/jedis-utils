@@ -596,6 +596,44 @@ class AbstractLuaScriptBuilderSpec extends Specification {
                 'redis.call("HDEL",theLocal1,theLocal1,ARGV[9],theLocal2)\n'
     }
 
+    def "hget"() {
+        given:
+        def keyArg = newKeyArgument('keyArg')
+        def strArg = newStringValueArgument('strArg')
+        def local = new LuaLocalValue('theLocal')
+        def ret = []
+
+        when:
+        def script = build { AbstractLuaScriptBuilder builder ->
+            builder.with {
+                ret << hget('theKey', 'theField')
+                ret << hget('theKey', strArg)
+                ret << hget('theKey', local)
+                ret << hget(keyArg, 'theField')
+                ret << hget(keyArg, strArg)
+                ret << hget(keyArg, local)
+                ret << hget(local, 'theField')
+                ret << hget(local, strArg)
+                ret << hget(local, local)
+            }
+        }
+
+        then:
+        script == 'local dummyLocal = redis.call("HGET","theKey","theField")\n' +
+                'local dummyLocal = redis.call("HGET","theKey",ARGV[1])\n' +
+                'local dummyLocal = redis.call("HGET","theKey",theLocal)\n' +
+                'local dummyLocal = redis.call("HGET",KEYS[1],"theField")\n' +
+                'local dummyLocal = redis.call("HGET",KEYS[2],ARGV[2])\n' +
+                'local dummyLocal = redis.call("HGET",KEYS[3],theLocal)\n' +
+                'local dummyLocal = redis.call("HGET",theLocal,"theField")\n' +
+                'local dummyLocal = redis.call("HGET",theLocal,ARGV[3])\n' +
+                'local dummyLocal = redis.call("HGET",theLocal,theLocal)\n'
+        ret.each {
+            assert it instanceof LuaLocalValue
+            assert it.name == 'dummyLocal'
+        }
+    }
+
     def "hgetAll"() {
         given:
         def arg = newKeyArgument('arg')

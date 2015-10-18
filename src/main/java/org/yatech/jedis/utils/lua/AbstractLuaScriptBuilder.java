@@ -513,6 +513,34 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
     }
 
     @Override
+    public LuaLocalValue hget(String key, String field) {
+        LuaAstLocalDeclaration local = declareNewLocal();
+        add(assignment(local, redisCall("HGET", arguments(stringValue(key), stringValue(field)))));
+        return new LuaLocalValue(local.getName());
+    }
+
+    @Override
+    public LuaLocalValue hget(String key, LuaValue<String> field) {
+        LuaAstLocalDeclaration local = declareNewLocal();
+        add(assignment(local, redisCall("HGET", arguments(stringValue(key), argument(field)))));
+        return new LuaLocalValue(local.getName());
+    }
+
+    @Override
+    public LuaLocalValue hget(LuaValue<String> key, String field) {
+        LuaAstLocalDeclaration local = declareNewLocal();
+        add(assignment(local, redisCall("HGET", arguments(argument(key), stringValue(field)))));
+        return new LuaLocalValue(local.getName());
+    }
+
+    @Override
+    public LuaLocalValue hget(LuaValue<String> key, LuaValue<String> field) {
+        LuaAstLocalDeclaration local = declareNewLocal();
+        add(assignment(local, redisCall("HGET", arguments(argument(key), argument(field)))));
+        return new LuaLocalValue(local.getName());
+    }
+
+    @Override
     public LuaLocalArray hgetAll(String key) {
         LuaAstLocalDeclaration local = declareNewLocal();
         add(assignment(local, redisCall("HGETALL", arguments(stringValue(key)))));

@@ -45,6 +45,8 @@ public interface JedisCommands<VoidReturnType> {
      */
     VoidReturnType del(LuaValue<String> key);
 
+    // TODO [YA] EXISTS
+
     // EXPIRE
 
     /**
@@ -383,6 +385,39 @@ public interface JedisCommands<VoidReturnType> {
      * @return
      */
     VoidReturnType hdel(LuaValue<String> key, LuaValue<String> field, LuaValue<String>... moreFields);
+
+    // TODO [YA] HEXISTS
+
+    // HGET
+
+    /**
+     * Get the value of a hash field
+     * @param key
+     * @param field
+     * @return
+     */
+    LuaLocalValue hget(String key, String field);
+    /**
+     * Get the value of a hash field
+     * @param key
+     * @param field
+     * @return
+     */
+    LuaLocalValue hget(String key, LuaValue<String> field);
+    /**
+     * Get the value of a hash field
+     * @param key
+     * @param field
+     * @return
+     */
+    LuaLocalValue hget(LuaValue<String> key, String field);
+    /**
+     * Get the value of a hash field
+     * @param key
+     * @param field
+     * @return
+     */
+    LuaLocalValue hget(LuaValue<String> key, LuaValue<String> field);
 
     // HGETALL
 
