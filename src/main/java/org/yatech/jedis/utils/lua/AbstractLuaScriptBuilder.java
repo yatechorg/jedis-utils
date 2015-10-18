@@ -603,6 +603,54 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
     }
 
     @Override
+    public BuilderType hincrByFloat(String key, String field, double increment) {
+        add(redisCallStatement("HINCRBYFLOAT", arguments(stringValue(key), stringValue(field), doubleValue(increment))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType hincrByFloat(String key, String field, LuaValue<Double> increment) {
+        add(redisCallStatement("HINCRBYFLOAT", arguments(stringValue(key), stringValue(field), argument(increment))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType hincrByFloat(String key, LuaValue<String> field, double increment) {
+        add(redisCallStatement("HINCRBYFLOAT", arguments(stringValue(key), argument(field), doubleValue(increment))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType hincrByFloat(String key, LuaValue<String> field, LuaValue<Double> increment) {
+        add(redisCallStatement("HINCRBYFLOAT", arguments(stringValue(key), argument(field), argument(increment))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType hincrByFloat(LuaValue<String> key, String field, double increment) {
+        add(redisCallStatement("HINCRBYFLOAT", arguments(argument(key), stringValue(field), doubleValue(increment))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType hincrByFloat(LuaValue<String> key, String field, LuaValue<Double> increment) {
+        add(redisCallStatement("HINCRBYFLOAT", arguments(argument(key), stringValue(field), argument(increment))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType hincrByFloat(LuaValue<String> key, LuaValue<String> field, double increment) {
+        add(redisCallStatement("HINCRBYFLOAT", arguments(argument(key), argument(field), doubleValue(increment))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType hincrByFloat(LuaValue<String> key, LuaValue<String> field, LuaValue<Double> increment) {
+        add(redisCallStatement("HINCRBYFLOAT", arguments(argument(key), argument(field), argument(increment))));
+        return thisBuilder();
+    }
+
+    @Override
     public BuilderType hmset(String key, Map<String, String> hash) {
         //TODO Implement
         throw new UnsupportedOperationException("Not implemented");

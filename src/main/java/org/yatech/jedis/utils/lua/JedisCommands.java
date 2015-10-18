@@ -501,6 +501,73 @@ public interface JedisCommands<VoidReturnType> {
      */
     VoidReturnType hincrBy(LuaValue<String> key, LuaValue<String> field, LuaValue<Long> increment);
 
+    // HINCRBYFLOAT
+
+    /**
+     * Increment the numeric value of a hash field by the given double precision floating point number
+     * @param key
+     * @param field
+     * @param increment
+     * @return
+     */
+    VoidReturnType hincrByFloat(String key, String field, double increment);
+    /**
+     * Increment the numeric value of a hash field by the given double precision floating point number
+     * @param key
+     * @param field
+     * @param increment
+     * @return
+     */
+    VoidReturnType hincrByFloat(String key, String field, LuaValue<Double> increment);
+    /**
+     * Increment the numeric value of a hash field by the given double precision floating point number
+     * @param key
+     * @param field
+     * @param increment
+     * @return
+     */
+    VoidReturnType hincrByFloat(String key, LuaValue<String> field, double increment);
+    /**
+     * Increment the numeric value of a hash field by the given double precision floating point number
+     * @param key
+     * @param field
+     * @param increment
+     * @return
+     */
+    VoidReturnType hincrByFloat(String key, LuaValue<String> field, LuaValue<Double> increment);
+    /**
+     * Increment the numeric value of a hash field by the given double precision floating point number
+     * @param key
+     * @param field
+     * @param increment
+     * @return
+     */
+    VoidReturnType hincrByFloat(LuaValue<String> key, String field, double increment);
+    /**
+     * Increment the numeric value of a hash field by the given double precision floating point number
+     * @param key
+     * @param field
+     * @param increment
+     * @return
+     */
+    VoidReturnType hincrByFloat(LuaValue<String> key, String field, LuaValue<Double> increment);
+    /**
+     * Increment the numeric value of a hash field by the given double precision floating point number
+     * @param key
+     * @param field
+     * @param increment
+     * @return
+     */
+    VoidReturnType hincrByFloat(LuaValue<String> key, LuaValue<String> field, double increment);
+    /**
+     * Increment the numeric value of a hash field by the given double precision floating point number
+     * @param key
+     * @param field
+     * @param increment
+     * @return
+     */
+    VoidReturnType hincrByFloat(LuaValue<String> key, LuaValue<String> field, LuaValue<Double> increment);
+
     // HMSET
 
     /**

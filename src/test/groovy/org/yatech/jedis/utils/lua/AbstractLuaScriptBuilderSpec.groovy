@@ -727,6 +727,76 @@ class AbstractLuaScriptBuilderSpec extends Specification {
                 'redis.call("HINCRBY",theLocal,theLocal,theLocal)\n'
     }
 
+    def "hincrByFloat"() {
+        given:
+        def keyArg = newKeyArgument('keyArg')
+        def strArg = newStringValueArgument('strArg')
+        def numArg = newDoubleValueArgument('numArg')
+        def local = new LuaLocalValue('theLocal')
+
+        when:
+        def script = build { AbstractLuaScriptBuilder builder ->
+            builder.with {
+                hincrByFloat('theKey','theField', 7.17)
+                hincrByFloat('theKey','theField', numArg)
+                hincrByFloat('theKey','theField', local)
+                hincrByFloat('theKey',strArg, 7.17)
+                hincrByFloat('theKey',strArg, numArg)
+                hincrByFloat('theKey',strArg, local)
+                hincrByFloat('theKey',local, 7.17)
+                hincrByFloat('theKey',local, numArg)
+                hincrByFloat('theKey',local, local)
+                hincrByFloat(keyArg,'theField', 7.17)
+                hincrByFloat(keyArg,'theField', numArg)
+                hincrByFloat(keyArg,'theField', local)
+                hincrByFloat(keyArg,strArg, 7.17)
+                hincrByFloat(keyArg,strArg, numArg)
+                hincrByFloat(keyArg,strArg, local)
+                hincrByFloat(keyArg,local, 7.17)
+                hincrByFloat(keyArg,local, numArg)
+                hincrByFloat(keyArg,local, local)
+                hincrByFloat(local,'theField', 7.17)
+                hincrByFloat(local,'theField', numArg)
+                hincrByFloat(local,'theField', local)
+                hincrByFloat(local,strArg, 7.17)
+                hincrByFloat(local,strArg, numArg)
+                hincrByFloat(local,strArg, local)
+                hincrByFloat(local,local, 7.17)
+                hincrByFloat(local,local, numArg)
+                hincrByFloat(local,local, local)
+            }
+        }
+
+        then:
+        script == 'redis.call("HINCRBYFLOAT","theKey","theField",7.17)\n' +
+                'redis.call("HINCRBYFLOAT","theKey","theField",ARGV[1])\n' +
+                'redis.call("HINCRBYFLOAT","theKey","theField",theLocal)\n' +
+                'redis.call("HINCRBYFLOAT","theKey",ARGV[2],7.17)\n' +
+                'redis.call("HINCRBYFLOAT","theKey",ARGV[3],ARGV[4])\n' +
+                'redis.call("HINCRBYFLOAT","theKey",ARGV[5],theLocal)\n' +
+                'redis.call("HINCRBYFLOAT","theKey",theLocal,7.17)\n' +
+                'redis.call("HINCRBYFLOAT","theKey",theLocal,ARGV[6])\n' +
+                'redis.call("HINCRBYFLOAT","theKey",theLocal,theLocal)\n' +
+                'redis.call("HINCRBYFLOAT",KEYS[1],"theField",7.17)\n' +
+                'redis.call("HINCRBYFLOAT",KEYS[2],"theField",ARGV[7])\n' +
+                'redis.call("HINCRBYFLOAT",KEYS[3],"theField",theLocal)\n' +
+                'redis.call("HINCRBYFLOAT",KEYS[4],ARGV[8],7.17)\n' +
+                'redis.call("HINCRBYFLOAT",KEYS[5],ARGV[9],ARGV[10])\n' +
+                'redis.call("HINCRBYFLOAT",KEYS[6],ARGV[11],theLocal)\n' +
+                'redis.call("HINCRBYFLOAT",KEYS[7],theLocal,7.17)\n' +
+                'redis.call("HINCRBYFLOAT",KEYS[8],theLocal,ARGV[12])\n' +
+                'redis.call("HINCRBYFLOAT",KEYS[9],theLocal,theLocal)\n' +
+                'redis.call("HINCRBYFLOAT",theLocal,"theField",7.17)\n' +
+                'redis.call("HINCRBYFLOAT",theLocal,"theField",ARGV[13])\n' +
+                'redis.call("HINCRBYFLOAT",theLocal,"theField",theLocal)\n' +
+                'redis.call("HINCRBYFLOAT",theLocal,ARGV[14],7.17)\n' +
+                'redis.call("HINCRBYFLOAT",theLocal,ARGV[15],ARGV[16])\n' +
+                'redis.call("HINCRBYFLOAT",theLocal,ARGV[17],theLocal)\n' +
+                'redis.call("HINCRBYFLOAT",theLocal,theLocal,7.17)\n' +
+                'redis.call("HINCRBYFLOAT",theLocal,theLocal,ARGV[18])\n' +
+                'redis.call("HINCRBYFLOAT",theLocal,theLocal,theLocal)\n'
+    }
+
     def "hmset"() {
         given:
         def arg = newKeyArgument('arg')
