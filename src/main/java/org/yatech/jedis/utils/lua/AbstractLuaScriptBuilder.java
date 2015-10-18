@@ -555,6 +555,54 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
     }
 
     @Override
+    public BuilderType hincrBy(String key, String field, long increment) {
+        add(redisCallStatement("HINCRBY", arguments(stringValue(key), stringValue(field), longValue(increment))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType hincrBy(String key, String field, LuaValue<Long> increment) {
+        add(redisCallStatement("HINCRBY", arguments(stringValue(key), stringValue(field), argument(increment))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType hincrBy(String key, LuaValue<String> field, long increment) {
+        add(redisCallStatement("HINCRBY", arguments(stringValue(key), argument(field), longValue(increment))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType hincrBy(String key, LuaValue<String> field, LuaValue<Long> increment) {
+        add(redisCallStatement("HINCRBY", arguments(stringValue(key), argument(field), argument(increment))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType hincrBy(LuaValue<String> key, String field, long increment) {
+        add(redisCallStatement("HINCRBY", arguments(argument(key), stringValue(field), longValue(increment))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType hincrBy(LuaValue<String> key, String field, LuaValue<Long> increment) {
+        add(redisCallStatement("HINCRBY", arguments(argument(key), stringValue(field), argument(increment))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType hincrBy(LuaValue<String> key, LuaValue<String> field, long increment) {
+        add(redisCallStatement("HINCRBY", arguments(argument(key), argument(field), longValue(increment))));
+        return thisBuilder();
+    }
+
+    @Override
+    public BuilderType hincrBy(LuaValue<String> key, LuaValue<String> field, LuaValue<Long> increment) {
+        add(redisCallStatement("HINCRBY", arguments(argument(key), argument(field), argument(increment))));
+        return thisBuilder();
+    }
+
+    @Override
     public BuilderType hmset(String key, Map<String, String> hash) {
         //TODO Implement
         throw new UnsupportedOperationException("Not implemented");

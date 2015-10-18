@@ -657,6 +657,76 @@ class AbstractLuaScriptBuilderSpec extends Specification {
         }
     }
 
+    def "hincrBy"() {
+        given:
+        def keyArg = newKeyArgument('keyArg')
+        def strArg = newStringValueArgument('strArg')
+        def numArg = newLongValueArgument('numArg')
+        def local = new LuaLocalValue('theLocal')
+
+        when:
+        def script = build { AbstractLuaScriptBuilder builder ->
+            builder.with {
+                hincrBy('theKey','theField', 7)
+                hincrBy('theKey','theField', numArg)
+                hincrBy('theKey','theField', local)
+                hincrBy('theKey',strArg, 7)
+                hincrBy('theKey',strArg, numArg)
+                hincrBy('theKey',strArg, local)
+                hincrBy('theKey',local, 7)
+                hincrBy('theKey',local, numArg)
+                hincrBy('theKey',local, local)
+                hincrBy(keyArg,'theField', 7)
+                hincrBy(keyArg,'theField', numArg)
+                hincrBy(keyArg,'theField', local)
+                hincrBy(keyArg,strArg, 7)
+                hincrBy(keyArg,strArg, numArg)
+                hincrBy(keyArg,strArg, local)
+                hincrBy(keyArg,local, 7)
+                hincrBy(keyArg,local, numArg)
+                hincrBy(keyArg,local, local)
+                hincrBy(local,'theField', 7)
+                hincrBy(local,'theField', numArg)
+                hincrBy(local,'theField', local)
+                hincrBy(local,strArg, 7)
+                hincrBy(local,strArg, numArg)
+                hincrBy(local,strArg, local)
+                hincrBy(local,local, 7)
+                hincrBy(local,local, numArg)
+                hincrBy(local,local, local)
+            }
+        }
+
+        then:
+        script == 'redis.call("HINCRBY","theKey","theField",7)\n' +
+                'redis.call("HINCRBY","theKey","theField",ARGV[1])\n' +
+                'redis.call("HINCRBY","theKey","theField",theLocal)\n' +
+                'redis.call("HINCRBY","theKey",ARGV[2],7)\n' +
+                'redis.call("HINCRBY","theKey",ARGV[3],ARGV[4])\n' +
+                'redis.call("HINCRBY","theKey",ARGV[5],theLocal)\n' +
+                'redis.call("HINCRBY","theKey",theLocal,7)\n' +
+                'redis.call("HINCRBY","theKey",theLocal,ARGV[6])\n' +
+                'redis.call("HINCRBY","theKey",theLocal,theLocal)\n' +
+                'redis.call("HINCRBY",KEYS[1],"theField",7)\n' +
+                'redis.call("HINCRBY",KEYS[2],"theField",ARGV[7])\n' +
+                'redis.call("HINCRBY",KEYS[3],"theField",theLocal)\n' +
+                'redis.call("HINCRBY",KEYS[4],ARGV[8],7)\n' +
+                'redis.call("HINCRBY",KEYS[5],ARGV[9],ARGV[10])\n' +
+                'redis.call("HINCRBY",KEYS[6],ARGV[11],theLocal)\n' +
+                'redis.call("HINCRBY",KEYS[7],theLocal,7)\n' +
+                'redis.call("HINCRBY",KEYS[8],theLocal,ARGV[12])\n' +
+                'redis.call("HINCRBY",KEYS[9],theLocal,theLocal)\n' +
+                'redis.call("HINCRBY",theLocal,"theField",7)\n' +
+                'redis.call("HINCRBY",theLocal,"theField",ARGV[13])\n' +
+                'redis.call("HINCRBY",theLocal,"theField",theLocal)\n' +
+                'redis.call("HINCRBY",theLocal,ARGV[14],7)\n' +
+                'redis.call("HINCRBY",theLocal,ARGV[15],ARGV[16])\n' +
+                'redis.call("HINCRBY",theLocal,ARGV[17],theLocal)\n' +
+                'redis.call("HINCRBY",theLocal,theLocal,7)\n' +
+                'redis.call("HINCRBY",theLocal,theLocal,ARGV[18])\n' +
+                'redis.call("HINCRBY",theLocal,theLocal,theLocal)\n'
+    }
+
     def "hmset"() {
         given:
         def arg = newKeyArgument('arg')

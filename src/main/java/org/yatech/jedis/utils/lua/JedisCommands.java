@@ -434,6 +434,73 @@ public interface JedisCommands<VoidReturnType> {
      */
     LuaLocalArray hgetAll(LuaValue<String> key);
 
+    // HINCRBY
+
+    /**
+     * Increment the numeric value of a hash field by the given number
+     * @param key
+     * @param field
+     * @param increment
+     * @return
+     */
+    VoidReturnType hincrBy(String key, String field, long increment);
+    /**
+     * Increment the numeric value of a hash field by the given number
+     * @param key
+     * @param field
+     * @param increment
+     * @return
+     */
+    VoidReturnType hincrBy(String key, String field, LuaValue<Long> increment);
+    /**
+     * Increment the numeric value of a hash field by the given number
+     * @param key
+     * @param field
+     * @param increment
+     * @return
+     */
+    VoidReturnType hincrBy(String key, LuaValue<String> field, long increment);
+    /**
+     * Increment the numeric value of a hash field by the given number
+     * @param key
+     * @param field
+     * @param increment
+     * @return
+     */
+    VoidReturnType hincrBy(String key, LuaValue<String> field, LuaValue<Long> increment);
+    /**
+     * Increment the numeric value of a hash field by the given number
+     * @param key
+     * @param field
+     * @param increment
+     * @return
+     */
+    VoidReturnType hincrBy(LuaValue<String> key, String field, long increment);
+    /**
+     * Increment the numeric value of a hash field by the given number
+     * @param key
+     * @param field
+     * @param increment
+     * @return
+     */
+    VoidReturnType hincrBy(LuaValue<String> key, String field, LuaValue<Long> increment);
+    /**
+     * Increment the numeric value of a hash field by the given number
+     * @param key
+     * @param field
+     * @param increment
+     * @return
+     */
+    VoidReturnType hincrBy(LuaValue<String> key, LuaValue<String> field, long increment);
+    /**
+     * Increment the numeric value of a hash field by the given number
+     * @param key
+     * @param field
+     * @param increment
+     * @return
+     */
+    VoidReturnType hincrBy(LuaValue<String> key, LuaValue<String> field, LuaValue<Long> increment);
+
     // HMSET
 
     /**
