@@ -5,13 +5,14 @@ import redis.clients.jedis.Jedis
 import spock.lang.Specification
 
 /**
- * Created by yinona on 22/09/15.
+ * Created on 22/09/15.
+ * @author Yinon Avraham
  */
-class LuaScriptSpec extends Specification {
+class BasicLuaScriptSpec extends Specification {
 
     def 'exec - no script caching'() {
         given:
-        def script = new LuaScript('script-text', LuaScriptConfig.newConfig().useScriptCaching(false).build())
+        def script = new BasicLuaScript('script-text', LuaScriptConfig.newConfig().useScriptCaching(false).build())
         def jedis = Mock(Jedis)
 
         when:
@@ -23,7 +24,7 @@ class LuaScriptSpec extends Specification {
 
     def 'exec - with script caching'() {
         given:
-        def script = new LuaScript('script-text', LuaScriptConfig.newConfig().useScriptCaching(true).build())
+        def script = new BasicLuaScript('script-text', LuaScriptConfig.newConfig().useScriptCaching(true).build())
         def jedis = Mock(Jedis)
 
         when:

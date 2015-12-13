@@ -5,7 +5,8 @@ import spock.lang.Specification
 import static org.yatech.jedis.utils.lua.AbstractLuaScriptBuilder.*
 
 /**
- * Created by yinona on 19/09/15.
+ * Created on 19/09/15.
+ * @author Yinon Avraham
  */
 class AbstractLuaScriptBuilderSpec extends Specification {
 

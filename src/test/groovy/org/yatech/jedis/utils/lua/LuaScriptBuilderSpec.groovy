@@ -24,7 +24,7 @@ class LuaScriptBuilderSpec extends Specification {
         .hmset('key1', payload)
         .select(0)
         .del('key1')
-        LuaScript script = builder.endScript()
+        BasicLuaScript script = builder.endScript()
 
         when:
         String scriptText = script.toString()
@@ -78,7 +78,7 @@ class LuaScriptBuilderSpec extends Specification {
         .hmset(key1, payload)
         .select(db0)
         .del(key1)
-        LuaPreparedScript preparedScript = builder.endPreparedScript()
+        BasicLuaPreparedScript preparedScript = builder.endPreparedScript()
 
         when:
         String scriptText = preparedScript.toString()

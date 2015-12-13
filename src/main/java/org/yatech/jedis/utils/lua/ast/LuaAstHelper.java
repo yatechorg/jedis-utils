@@ -1,12 +1,11 @@
 package org.yatech.jedis.utils.lua.ast;
 
-import org.yatech.jedis.utils.lua.LuaLocalArray;
-
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by yinona on 15/09/15.
+ * Created on 15/09/15.
+ * @author Yinon Avraham
  */
 public class LuaAstHelper {
 

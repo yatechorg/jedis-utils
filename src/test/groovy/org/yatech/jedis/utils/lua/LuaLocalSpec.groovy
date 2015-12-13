@@ -3,7 +3,8 @@ package org.yatech.jedis.utils.lua
 import spock.lang.Specification
 
 /**
- * Created by yinona on 16/10/15.
+ * Created on 16/10/15.
+ * @author Yinon Avraham
  */
 class LuaLocalSpec extends Specification {
 

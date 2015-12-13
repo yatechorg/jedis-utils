@@ -2,9 +2,10 @@ package org.yatech.jedis.utils.lua.ast;
 
 /**
  * Configuration for the lua script. This class is immutable. Use the builder to create instances.
- *
+ * <p>
+ * Created on 27/09/15.
  * @see #newConfig()
- * Created by yinona on 27/09/15.
+ * @author Yinon Avraham
  */
 public final class LuaScriptConfig {
 
@@ -12,14 +13,17 @@ public final class LuaScriptConfig {
      * Default lua script configuration:
      * <ul>
      *     <li>Use script caching: <code>true</code></li>
+     *     <li>Use thread safe implementation: <code>false</code></li>
      * </ul>
      */
     public static final LuaScriptConfig DEFAULT = newConfig().build();
 
     private final boolean useScriptCaching;
+    private final boolean threadSafe;
 
-    private LuaScriptConfig(boolean useScriptCaching) {
+    private LuaScriptConfig(boolean useScriptCaching, boolean threadSafe) {
         this.useScriptCaching = useScriptCaching;
+        this.threadSafe = threadSafe;
     }
 
     /**
@@ -29,6 +33,15 @@ public final class LuaScriptConfig {
      */
     public boolean isUseScriptCaching() {
         return useScriptCaching;
+    }
+
+    /**
+     * Use thred safe implementation.
+     * If <code>true</code>, a thread safe implementation will be created.
+     * @return
+     */
+    public boolean isThreadSafe() {
+        return threadSafe;
     }
 
     // +---------+
@@ -49,9 +62,11 @@ public final class LuaScriptConfig {
      */
     public static class LuaScriptConfigBuilder {
         private boolean useScriptCaching;
+        private boolean threadSafe;
 
         private LuaScriptConfigBuilder() {
             this.useScriptCaching = true;
+            this.threadSafe = false;
         }
 
         /**
@@ -66,11 +81,22 @@ public final class LuaScriptConfig {
         }
 
         /**
+         * Use thread safe implementation.
+         * If <code>true</code>, a thread safe implementation will be used.
+         * By default this setting is <code>false</code>.
+         * @return this builder, for chaining builder method calls.
+         */
+        public LuaScriptConfigBuilder threadSafe(boolean safe) {
+            this.threadSafe = safe;
+            return this;
+        }
+
+        /**
          * Build the lua script configuration
          * @return the new configuration instance with the settings provided to this builder.
          */
         public LuaScriptConfig build() {
-            return new LuaScriptConfig(useScriptCaching);
+            return new LuaScriptConfig(useScriptCaching, threadSafe);
         }
     }
 }

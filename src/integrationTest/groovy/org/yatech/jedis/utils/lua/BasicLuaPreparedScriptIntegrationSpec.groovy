@@ -5,9 +5,10 @@ import static org.yatech.jedis.utils.lua.LuaConditions.isNull
 import static org.yatech.jedis.utils.lua.LuaScriptBuilder.startScript
 
 /**
- * Created by yinona on 22/09/15.
+ * Created on 22/09/15.
+ * @author Yinon Avraham
  */
-class LuaPreparedScriptIntegrationSpec extends BaseIntegrationSpec {
+class BasicLuaPreparedScriptIntegrationSpec extends BaseIntegrationSpec {
 
     def 'zadd in script with double value'() {
         given:

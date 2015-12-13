@@ -58,50 +58,50 @@ public abstract class AbstractLuaScriptBuilder<BuilderType extends AbstractLuaSc
     // *** Arguments ***
 
     /**
-     * Create a new key argument which is a place holder for keys in a {@link org.yatech.jedis.utils.lua.LuaPreparedScript}.
+     * Create a new key argument which is a place holder for keys in a {@link BasicLuaPreparedScript}.
      * @param argName the name of the argument
      * @return the new argument instance
-     * @see org.yatech.jedis.utils.lua.LuaPreparedScript#setKeyArgument(String, String)
+     * @see BasicLuaPreparedScript#setKeyArgument(String, String)
      */
     public static LuaKeyArgument newKeyArgument(String argName) {
         return new LuaKeyArgument(argName);
     }
 
     /**
-     * Create a new string value argument which is a place holder for string values in a {@link org.yatech.jedis.utils.lua.LuaPreparedScript}.
+     * Create a new string value argument which is a place holder for string values in a {@link BasicLuaPreparedScript}.
      * @param argName the name of the argument
      * @return the new argument instance
-     * @see org.yatech.jedis.utils.lua.LuaPreparedScript#setValueArgument(String, String)
+     * @see BasicLuaPreparedScript#setValueArgument(String, String)
      */
     public static LuaStringValueArgument newStringValueArgument(String argName) {
         return new LuaStringValueArgument(argName);
     }
 
     /**
-     * Create a new int value argument which is a place holder for int values in a {@link org.yatech.jedis.utils.lua.LuaPreparedScript}.
+     * Create a new int value argument which is a place holder for int values in a {@link BasicLuaPreparedScript}.
      * @param argName the name of the argument
      * @return the new argument instance
-     * @see org.yatech.jedis.utils.lua.LuaPreparedScript#setValueArgument(String, int)
+     * @see BasicLuaPreparedScript#setValueArgument(String, int)
      */
     public static LuaIntValueArgument newIntValueArgument(String argName) {
         return new LuaIntValueArgument(argName);
     }
 
     /**
-     * Create a new long value argument which is a place holder for int values in a {@link org.yatech.jedis.utils.lua.LuaPreparedScript}.
+     * Create a new long value argument which is a place holder for int values in a {@link BasicLuaPreparedScript}.
      * @param argName the name of the argument
      * @return the new argument instance
-     * @see org.yatech.jedis.utils.lua.LuaPreparedScript#setValueArgument(String, long)
+     * @see BasicLuaPreparedScript#setValueArgument(String, long)
      */
     public static LuaLongValueArgument newLongValueArgument(String argName) {
         return new LuaLongValueArgument(argName);
     }
 
     /**
-     * Create a new double value argument which is a place holder for double values in a {@link org.yatech.jedis.utils.lua.LuaPreparedScript}.
+     * Create a new double value argument which is a place holder for double values in a {@link BasicLuaPreparedScript}.
      * @param argName the name of the argument
      * @return the new argument instance
-     * @see org.yatech.jedis.utils.lua.LuaPreparedScript#setValueArgument(String, double)
+     * @see BasicLuaPreparedScript#setValueArgument(String, double)
      */
     public static LuaDoubleValueArgument newDoubleValueArgument(String argName) {
         return new LuaDoubleValueArgument(argName);

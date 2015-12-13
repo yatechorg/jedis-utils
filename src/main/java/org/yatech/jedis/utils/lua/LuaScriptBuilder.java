@@ -10,7 +10,9 @@ import java.util.*;
 /**
  * Builder for a lua script
  *
- * Created by Yinon Avraham on 11/09/2015.
+ * <p>
+ * Created on 11/09/2015.
+ * @author Yinon Avraham
  * @see #startScript()
  * @see #endScript()
  * @see #endPreparedScript()
@@ -79,7 +81,7 @@ public class LuaScriptBuilder extends AbstractLuaScriptBuilder<LuaScriptBuilder>
             add(new LuaAstReturnStatement());
         }
         String scriptText = buildScriptText();
-        return new LuaScript(scriptText, config);
+        return new BasicLuaScript(scriptText, config);
     }
 
     /**
@@ -99,7 +101,7 @@ public class LuaScriptBuilder extends AbstractLuaScriptBuilder<LuaScriptBuilder>
     public LuaScript endScriptReturn(LuaValue value, LuaScriptConfig config) {
         add(new LuaAstReturnStatement(argument(value)));
         String scriptText = buildScriptText();
-        return new LuaScript(scriptText, config);
+        return new BasicLuaScript(scriptText, config);
     }
 
     /**
@@ -126,7 +128,13 @@ public class LuaScriptBuilder extends AbstractLuaScriptBuilder<LuaScriptBuilder>
             add(new LuaAstReturnStatement());
         }
         String scriptText = buildScriptText();
-        return new LuaPreparedScript(scriptText, new ArrayList<>(keyArg2AstArg.keySet()), new ArrayList<>(valueArg2AstArg.keySet()), config);
+        ArrayList<LuaKeyArgument> keyList = new ArrayList<>(keyArg2AstArg.keySet());
+        ArrayList<LuaValueArgument> argvList = new ArrayList<>(valueArg2AstArg.keySet());
+        if (config.isThreadSafe()) {
+            return new ThreadSafeLuaPreparedScript(scriptText, keyList, argvList, config);
+        } else {
+            return new BasicLuaPreparedScript(scriptText, keyList, argvList, config);
+        }
     }
 
     /**
@@ -145,8 +153,7 @@ public class LuaScriptBuilder extends AbstractLuaScriptBuilder<LuaScriptBuilder>
      */
     public LuaPreparedScript endPreparedScriptReturn(LuaValue value, LuaScriptConfig config) {
         add(new LuaAstReturnStatement(argument(value)));
-        String scriptText = buildScriptText();
-        return new LuaPreparedScript(scriptText, new ArrayList<>(keyArg2AstArg.keySet()), new ArrayList<>(valueArg2AstArg.keySet()), config);
+        return endPreparedScript(config);
     }
 
     /**

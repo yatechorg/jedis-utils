@@ -5,9 +5,10 @@ import redis.clients.jedis.Jedis
 import spock.lang.Specification
 
 /**
- * Created by yinona on 22/09/15.
+ * Created on 13/12/15
+ * @author Yinon Avraham
  */
-class LuaPreparedScriptSpec extends Specification {
+class ThreadSafeLuaPreparedScriptSpec extends Specification {
 
     def 'exec - no script caching'() {
         given:
@@ -17,7 +18,7 @@ class LuaPreparedScriptSpec extends Specification {
                     new LuaIntValueArgument('int1'),
                     new LuaIntValueArgument('long1'),
                     new LuaDoubleValueArgument('dbl1')]
-        def prepScript = new LuaPreparedScript('script-text', keys, argv, LuaScriptConfig.newConfig().useScriptCaching(false).build())
+        def prepScript = new ThreadSafeLuaPreparedScript('script-text', keys, argv, LuaScriptConfig.newConfig().useScriptCaching(false).build())
 
         when:
         prepScript.exec(jedis)
@@ -51,7 +52,7 @@ class LuaPreparedScriptSpec extends Specification {
                     new LuaIntValueArgument('int1'),
                     new LuaIntValueArgument('long1'),
                     new LuaDoubleValueArgument('dbl1')]
-        def prepScript = new LuaPreparedScript('script-text', keys, argv, LuaScriptConfig.newConfig().useScriptCaching(true).build())
+        def prepScript = new ThreadSafeLuaPreparedScript('script-text', keys, argv, LuaScriptConfig.newConfig().useScriptCaching(true).build())
 
         when:
         prepScript.exec(jedis)

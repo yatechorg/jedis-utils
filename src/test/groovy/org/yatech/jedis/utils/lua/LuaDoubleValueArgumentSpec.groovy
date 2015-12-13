@@ -3,7 +3,8 @@ package org.yatech.jedis.utils.lua
 import spock.lang.Specification
 
 /**
- * Created by yinona on 22/09/15.
+ * Created on 22/09/15.
+ * @author Yinon Avraham
  */
 class LuaDoubleValueArgumentSpec extends Specification {
 

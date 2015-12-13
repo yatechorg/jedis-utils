@@ -1,12 +1,15 @@
 package org.yatech.jedis.utils.lua
 
 import redis.clients.jedis.Jedis
+import redis.clients.jedis.JedisPool
+import redis.clients.jedis.JedisPoolConfig
 import redis.embedded.RedisServer
 import spock.lang.Shared
 import spock.lang.Specification
 
 /**
- * Created by yinona on 22/09/15.
+ * Created on 22/09/15.
+ * @author Yinon Avraham
  */
 abstract class BaseIntegrationSpec extends Specification {
 
@@ -41,6 +44,12 @@ abstract class BaseIntegrationSpec extends Specification {
 
     protected Jedis createJedis() {
         return new Jedis('localhost', PORT)
+    }
+
+    protected JedisPool createJedisPool(Integer poolSize = null) {
+        def config = new JedisPoolConfig()
+        if (poolSize && poolSize > 0) config.maxTotal = poolSize
+        return new JedisPool(config, 'localhost', PORT)
     }
 
     protected void close(Jedis jedis) {

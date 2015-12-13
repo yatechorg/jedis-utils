@@ -7,7 +7,8 @@ import static org.yatech.jedis.utils.lua.LuaConditions.isNull
 import static org.yatech.jedis.utils.lua.LuaScriptBuilder.startScript
 
 /**
- * Created by yinona on 22/09/15.
+ * Created on 22/09/15.
+ * @author Yinon Avraham
  */
 class LuaScriptIntegrationSpec extends BaseIntegrationSpec {
 
