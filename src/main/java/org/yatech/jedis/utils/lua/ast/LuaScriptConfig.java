@@ -1,11 +1,12 @@
 package org.yatech.jedis.utils.lua.ast;
 
 /**
- * Configuration for the lua script.
+ * Configuration for the lua script. This class is immutable. Use the builder to create instances.
  *
+ * @see #newConfig()
  * Created by yinona on 27/09/15.
  */
-public class LuaScriptConfig {
+public final class LuaScriptConfig {
 
     /**
      * Default lua script configuration:

@@ -1,7 +1,5 @@
 package org.yatech.jedis.utils.lua;
 
-import java.util.UUID;
-
 /**
  * An argument placeholder for a key value
  *

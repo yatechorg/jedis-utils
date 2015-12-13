@@ -3,7 +3,7 @@ package org.yatech.jedis.utils.lua;
 /**
  * Created by Yinon Avraham on 11/09/2015.
  */
-abstract class LuaArgument<T> implements LuaValue<T> {
+abstract class LuaArgument<T> implements LuaValue<T>, Cloneable {
 
     private final String name;
     private T value;
@@ -49,5 +49,14 @@ abstract class LuaArgument<T> implements LuaValue<T> {
     @Override
     public String toString() {
         return name + "=" + value;
+    }
+
+    @Override
+    protected LuaArgument clone() {
+        try {
+            return (LuaArgument) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException("Unexpected exception - clone should be supported", e);
+        }
     }
 }

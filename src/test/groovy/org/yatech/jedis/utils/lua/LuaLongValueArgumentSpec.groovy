@@ -40,4 +40,30 @@ class LuaLongValueArgumentSpec extends Specification {
         arg1.hashCode() == arg1_.hashCode()
     }
 
+    def 'clone'() {
+        given:
+        def arg1 = new LuaLongValueArgument('arg1')
+        assert arg1.value == null
+
+        when:
+        def arg1_ = arg1.clone()
+
+        then:
+        arg1_.name == 'arg1'
+        arg1_.value == null
+
+        when:
+        arg1.value = 7L
+
+        then:
+        arg1_.value == null
+
+        when:
+        arg1_.value = 8L
+
+        then:
+        arg1.value == 7L
+        arg1_.value == 8L
+    }
+
 }
