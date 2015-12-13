@@ -36,7 +36,7 @@ public final class LuaScriptConfig {
     }
 
     /**
-     * Use thred safe implementation.
+     * Use thread safe implementation.
      * If <code>true</code>, a thread safe implementation will be created.
      * @return
      */
