@@ -1,4 +1,4 @@
-package org.yatech.jedis.utils.lua.ast;
+package org.yatech.jedis.utils.lua;
 
 /**
  * Configuration for the lua script. This class is immutable. Use the builder to create instances.
@@ -51,7 +51,7 @@ public final class LuaScriptConfig {
     /**
      * Start building a new configuration.
      * @return the configuration builder
-     * @see org.yatech.jedis.utils.lua.ast.LuaScriptConfig.LuaScriptConfigBuilder#build()
+     * @see LuaScriptConfig.LuaScriptConfigBuilder#build()
      */
     public static LuaScriptConfigBuilder newConfig() {
         return new LuaScriptConfigBuilder();

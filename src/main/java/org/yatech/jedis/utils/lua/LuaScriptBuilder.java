@@ -3,7 +3,6 @@ package org.yatech.jedis.utils.lua;
 import org.yatech.jedis.utils.lua.ast.LuaAstArg;
 import org.yatech.jedis.utils.lua.ast.LuaAstReturnStatement;
 import org.yatech.jedis.utils.lua.ast.LuaAstStatement;
-import org.yatech.jedis.utils.lua.ast.LuaScriptConfig;
 
 import java.util.*;
 

@@ -1,6 +1,5 @@
 package org.yatech.jedis.utils.lua
 
-import org.yatech.jedis.utils.lua.ast.LuaScriptConfig
 import redis.clients.jedis.JedisPool
 
 import java.util.concurrent.atomic.AtomicInteger
