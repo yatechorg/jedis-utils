@@ -97,12 +97,12 @@ public class MyService {
     }
 
     private LuaPreparedScript createScript() {
-        LuaKeyArgument orderedMembers = newKeyArgument("zset_key");
+        LuaKeyArgument zsetKey = newKeyArgument("zset_key");
         LuaDoubleValueArgument score = newDoubleValueArgument("score");
         LuaStringValueArgument member = newStringValueArgument("member");
         LuaScriptConfig config = LuaScriptConfig.newConfig().threadSafe(true).build();
         LuaPreparedScript script = startScript()
-                .zadd(orderedMembers, score, member)
+                .zadd(zsetKey, score, member)
                 .endPreparedScript(config);
         return script;
     }
