@@ -72,3 +72,59 @@ script.setValueArgument('score',1.234)
 Jedis jedis = ...
 script.exec(jedis)
 ```
+
+### Thread-safe Lua Prepared Script
+If you need to have a prepared lua script which should be used in a multithreaded application, it is advised to create it as thread-safe. In order to do so, use `LuaScriptConfig` and set `threadSafe` to `true`. See example below:
+
+```java
+import org.yatech.jedis.utils.lua.LuaDoubleValueArgument;
+import org.yatech.jedis.utils.lua.LuaKeyArgument;
+import org.yatech.jedis.utils.lua.LuaPreparedScript;
+import org.yatech.jedis.utils.lua.LuaScriptConfig;
+import org.yatech.jedis.utils.lua.LuaStringValueArgument;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+
+import static org.yatech.jedis.utils.lua.LuaScriptBuilder.*;
+
+public class MyService {
+    private final LuaPreparedScript script;
+    private final JedisPool jedisPool;
+
+    public MyService() {
+        this.script = createScript();
+        this.jedisPool = new JedisPool();
+    }
+
+    private LuaPreparedScript createScript() {
+        LuaKeyArgument orderedMembers = newKeyArgument("zset_key");
+        LuaDoubleValueArgument score = newDoubleValueArgument("score");
+        LuaStringValueArgument member = newStringValueArgument("member");
+        LuaScriptConfig config = LuaScriptConfig.newConfig().threadSafe(true).build();
+        LuaPreparedScript script = startScript()
+                .zadd(orderedMembers, score, member)
+                .endPreparedScript(config);
+        return script;
+    }
+    
+    public void addMember(String member, double score) {
+        script.setKeyArgument("zset_key", "ordered_members");
+        script.setValueArgument("member", member);
+        script.setValueArgument("score", score);
+        try (Jedis jedis = jedisPool.getResource()) {
+            script.exec(jedis);
+        }
+    }
+    
+    public void destroy() {
+        jedisPool.destroy();
+    }
+}
+```
+
+### Script Caching
+Script caching is enabled by default and is handled internally. This reduces the need to load the script to redis each time it is executed. If you prefer not to use script caching for any reason, use `LuaScriptConfig` and set `useScriptCaching` to `false`:
+
+```java
+LuaScriptConfig config = LuaScriptConfig.newConfig().useScriptCaching(false).build();
+```
