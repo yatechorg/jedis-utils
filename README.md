@@ -77,11 +77,9 @@ script.exec(jedis)
 If you need to have a prepared lua script which should be used in a multithreaded application, it is advised to create it as thread-safe. In order to do so, use `LuaScriptConfig` and set `threadSafe` to `true`. See example below:
 
 ```java
-import org.yatech.jedis.utils.lua.LuaDoubleValueArgument;
-import org.yatech.jedis.utils.lua.LuaKeyArgument;
 import org.yatech.jedis.utils.lua.LuaPreparedScript;
 import org.yatech.jedis.utils.lua.LuaScriptConfig;
-import org.yatech.jedis.utils.lua.LuaStringValueArgument;
+import org.yatech.jedis.utils.lua.LuaValue;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
@@ -97,9 +95,9 @@ public class MyService {
     }
 
     private LuaPreparedScript createScript() {
-        LuaKeyArgument zsetKey = newKeyArgument("zset_key");
-        LuaDoubleValueArgument score = newDoubleValueArgument("score");
-        LuaStringValueArgument member = newStringValueArgument("member");
+        LuaValue<String> zsetKey = newKeyArgument("zset_key");
+        LuaValue<Double> score = newDoubleValueArgument("score");
+        LuaValue<String> member = newStringValueArgument("member");
         LuaScriptConfig config = LuaScriptConfig.newConfig().threadSafe(true).build();
         LuaPreparedScript script = startScript()
                 .zadd(zsetKey, score, member)
@@ -127,4 +125,16 @@ Script caching is enabled by default and is handled internally. This reduces the
 
 ```java
 LuaScriptConfig config = LuaScriptConfig.newConfig().useScriptCaching(false).build();
+```
+
+### Assign Value to an Existing Local Variable
+In order to reuse an existing local variable, use the `assign` builder method:
+
+```java
+LuaScriptBuilder builder = startScript();
+LuaLocalValue myLocal = builder.get("mykey1");
+LuaScript script = builder
+    .set("mykey2", myLocal)
+    .assign(myLocal, builder.get("mykey3"))
+    .endScriptReturn(myLocal);
 ```
