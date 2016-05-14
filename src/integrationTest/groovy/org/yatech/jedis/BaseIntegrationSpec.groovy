@@ -1,4 +1,4 @@
-package org.yatech.jedis.utils.lua
+package org.yatech.jedis
 
 import redis.clients.jedis.Jedis
 import redis.clients.jedis.JedisPool
@@ -18,6 +18,7 @@ abstract class BaseIntegrationSpec extends Specification {
     @Shared
     private RedisServer redisServer
 
+    @Shared
     protected Jedis jedis
 
     def setupSpec() {
