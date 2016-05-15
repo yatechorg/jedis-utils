@@ -26,7 +26,7 @@ class JedisMapSpec extends BaseCollectionIntegrationSpec {
         map.values().empty
         map.get('field1') == null
         map.remove('field1') == null
-        map.remove('field1', 'field2') == 0
+        !map.remove('field1', 'field2')
         verifyJedis.type('the-map') == 'none'
 
         when: 'put a field-value pair'
