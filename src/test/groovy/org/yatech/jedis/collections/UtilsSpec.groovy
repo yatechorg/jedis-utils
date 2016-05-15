@@ -11,6 +11,17 @@ import static org.yatech.jedis.collections.Utils.assertTrue
  */
 class UtilsSpec extends Specification {
 
+    def 'private empty constructor'() {
+        given:
+        def constructor = Utils.getDeclaredConstructor()
+
+        when:
+        constructor.newInstance()
+
+        then:
+        thrown(IllegalAccessException)
+    }
+
     def 'assert true'() {
         when:
         assertTrue(true, 'arg1', 'the error message')
