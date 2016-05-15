@@ -26,4 +26,12 @@ public class JedisCollections {
     public JedisMap getMap(int db, String key) {
         return new JedisMap(jedisPool, db, key);
     }
+
+    public static JedisList getList(Jedis jedis, String key) {
+        return new JedisList(jedis, key);
+    }
+
+    public JedisList getList(int db, String key) {
+        return new JedisList(jedisPool, db, key);
+    }
 }

@@ -1,33 +1,12 @@
 package org.yatech.jedis.collections
 
-import org.yatech.jedis.BaseIntegrationSpec
-import redis.clients.jedis.JedisPool
-import spock.lang.Shared
 import spock.lang.Unroll
 
 /**
  * <p>Created on 14/05/16
  * @author Yinon Avraham
  */
-class JedisMapSpec extends BaseIntegrationSpec {
-
-    @Shared
-    private JedisCollections jedisCollections
-
-    @Shared
-    private JedisPool jedisPool;
-
-    def setupSpec() {
-        jedisPool = createJedisPool(4)
-        jedisCollections = new JedisCollections(jedisPool)
-    }
-
-    def cleanupSpec() {
-        if (jedisPool) {
-            jedisPool.close()
-            jedisPool.destroy()
-        }
-    }
+class JedisMapSpec extends BaseCollectionIntegrationSpec {
 
     @Unroll
     def 'test main map functionality of map #testName'() {

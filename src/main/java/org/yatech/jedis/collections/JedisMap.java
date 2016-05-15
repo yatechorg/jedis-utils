@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * A {@link Map} implementation giving an abstraction over Redis' hash value type.
  * <p>Created on 14/05/16
  *
  * @author Yinon Avraham
@@ -30,7 +31,7 @@ public class JedisMap extends JedisCollectionBase implements Map<String, String>
     }
 
     /**
-     * Get the length of the map (i.e. the number of keys).<br/>
+     * Get the length of the map (i.e. the number of keys).<br>
      * This is similar to {@link #size()} but is preferred since redis' capacity supports long typed values
      * @return the number of keys
      */
