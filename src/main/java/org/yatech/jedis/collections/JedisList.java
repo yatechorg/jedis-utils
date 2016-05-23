@@ -54,6 +54,7 @@ public class JedisList extends JedisCollectionBase implements Collection<String>
 
     @Override
     public Iterator<String> iterator() {
+        //TODO Improve memory consumption using lindex & llen
         return toList().iterator();
     }
 

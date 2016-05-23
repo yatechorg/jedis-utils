@@ -4,6 +4,7 @@ import spock.lang.Specification
 
 import static org.yatech.jedis.collections.Utils.assertNotNull
 import static org.yatech.jedis.collections.Utils.assertTrue
+import static org.yatech.jedis.collections.Utils.toStringArray
 
 /**
  * <p>Created on 14/05/16
@@ -50,5 +51,18 @@ class UtilsSpec extends Specification {
         then:
         def e = thrown(IllegalArgumentException)
         e.message == "arg1: must not be null"
+    }
+
+    def 'collection to string array'() {
+        expect:
+        toStringArray(collection) == array
+
+        where:
+        collection       | array
+        null             | null
+        []               | new String[0]
+        [1, 2, 3]        | ["1", "2", "3"] as String[]
+        ["a", "b", "c"]  | ["a", "b", "c"] as String[]
+        ["a", null, "c"] | ["a", null, "c"] as String[]
     }
 }

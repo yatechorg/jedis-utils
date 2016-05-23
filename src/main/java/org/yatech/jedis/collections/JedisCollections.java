@@ -34,4 +34,12 @@ public class JedisCollections {
     public JedisList getList(int db, String key) {
         return new JedisList(jedisPool, db, key);
     }
+
+    public static JedisSet getSet(Jedis jedis, String key) {
+        return new JedisSet(jedis, key);
+    }
+
+    public JedisSet getSet(int db, String key) {
+        return new JedisSet(jedisPool, db, key);
+    }
 }
