@@ -5,6 +5,9 @@
 # jedis-utils
 Utilities for common tasks using [Jedis](https://github.com/xetorthio/jedis) (the java redis client).
 
+* [Jedis Collections](#jedis-collections)
+* [Lua script Builder](#lua-script-builder)
+
 ## Jedis Collections
 
 An abstraction of Redis' value types by implementing `java.util` collection interfaces.  
