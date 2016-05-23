@@ -19,7 +19,7 @@ public abstract class BaseCollectionIntegrationSpec extends BaseIntegrationSpec 
 
     def setupSpec() {
         jedisPool = createJedisPool(4)
-        jedisCollections = new JedisCollections(jedisPool)
+        jedisCollections = JedisCollections.getInstance(jedisPool)
     }
 
     def cleanupSpec() {
