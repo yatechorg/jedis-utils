@@ -1,5 +1,6 @@
 package org.yatech.jedis.collections;
 
+import org.yatech.jedis.collections.JedisSortedSet.ScoreProvider;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
@@ -72,7 +73,7 @@ public class JedisCollections {
      * Get a {@link java.util.Set} abstraction of a set redis value in the specified key, using the given {@link Jedis}.
      * @param jedis the {@link Jedis} connection to use for the set operations.
      * @param key the key of the set value in redis
-     * @return the {@link JedisMap} instance
+     * @return the {@link JedisSet} instance
      */
     public static JedisSet getSet(Jedis jedis, String key) {
         return new JedisSet(jedis, key);
@@ -86,5 +87,49 @@ public class JedisCollections {
      */
     public JedisSet getSet(int db, String key) {
         return new JedisSet(jedisPool, db, key);
+    }
+
+    /**
+     * Get a {@link java.util.Set} abstraction of a sorted set redis value in the specified key, using the given {@link Jedis}.
+     * Uses the default score provider (time based).
+     * @param jedis the {@link Jedis} connection to use for the sorted set operations.
+     * @param key the key of the sorted set value in redis
+     * @return the {@link JedisSortedSet} instance
+     */
+    public static JedisSortedSet getSortedSet(Jedis jedis, String key) {
+        return new JedisSortedSet(jedis, key);
+    }
+
+    /**
+     * Get a {@link java.util.Set} abstraction of a sorted set redis value in the specified key, using the given {@link Jedis}.
+     * @param jedis the {@link Jedis} connection to use for the sorted set operations.
+     * @param key the key of the sorted set value in redis
+     * @param scoreProvider the provider to use for assigning scores when none is given explicitly.
+     * @return the {@link JedisSortedSet} instance
+     */
+    public static JedisSortedSet getSortedSet(Jedis jedis, String key, ScoreProvider scoreProvider) {
+        return new JedisSortedSet(jedis, key, scoreProvider);
+    }
+
+    /**
+     * Get a {@link java.util.Set} abstraction of a sorted set redis value in the specified database index and key.
+     * Uses the default score provider (time based).
+     * @param db the database index where the key with the sorted set value is / should be stored.
+     * @param key the key of the sorted set value in redis
+     * @return the {@link JedisSortedSet} instance
+     */
+    public JedisSortedSet getSortedSet(int db, String key) {
+        return new JedisSortedSet(jedisPool, db, key);
+    }
+
+    /**
+     * Get a {@link java.util.Set} abstraction of a sorted set redis value in the specified database index and key.
+     * @param db the database index where the key with the sorted set value is / should be stored.
+     * @param key the key of the sorted set value in redis
+     * @param scoreProvider the provider to use for assigning scores when none is given explicitly.
+     * @return the {@link JedisSortedSet} instance
+     */
+    public JedisSortedSet getSortedSet(int db, String key, ScoreProvider scoreProvider) {
+        return new JedisSortedSet(jedisPool, db, key, scoreProvider);
     }
 }

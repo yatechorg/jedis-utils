@@ -9,7 +9,7 @@ import spock.lang.Unroll
 class JedisListSpec extends BaseCollectionIntegrationSpec {
 
     @Unroll
-    def 'test main map functionality of list #testName'() {
+    def 'test main list functionality of list #testName'() {
         given:
         def verifyJedis = createJedis()
         verifyJedis.select(db)
