@@ -13,11 +13,12 @@ Utilities for common tasks using [Jedis](https://github.com/xetorthio/jedis) (th
 An abstraction of Redis' value types by implementing `java.util` collection interfaces.  
 Includes:  
 
-| Jedis Collection | Corresponding `java.util` Interface | Comments |  
-| --- | --- | --- |  
-| `JedisMap` | `Map` |   |  
-| `JedisList` | `List` | Implements `java.util.Collection`, not `java.util.List`, because of a random access limitation, but gives an ordered collection functionality, close enough to a list |  
-| `JedisSet` | `Set` |   |  
+| Jedis Collection | Corresponding `java.util` Interface | Redis Type | Comments |  
+| --- | --- | --- | --- |  
+| `JedisMap` | `Map` | `hash` |   |  
+| `JedisList` | `List` | `list` | Implements `java.util.Collection`, not `java.util.List`, because of a random access limitation, but gives an ordered collection functionality, close enough to a list |  
+| `JedisSet` | `Set` | `set` |   |  
+| `JedisSortedSet` | `Set` | `zset` |   |  
 
 In order to "wrap" a Redis value with the appropriate abstraction, use the `JedisCollections` facade. For example, in order to wrap the hash value in the `myhash` key in database index 2, use:  
 
