@@ -3,9 +3,8 @@ package org.yatech.jedis.utils.lua
 import org.yatech.jedis.BaseIntegrationSpec
 import redis.clients.jedis.exceptions.JedisDataException
 
-import static org.yatech.jedis.utils.lua.AbstractLuaScriptBuilder.newKeyArgument
 import static org.yatech.jedis.utils.lua.LuaConditions.isNull
-import static org.yatech.jedis.utils.lua.LuaScriptBuilder.startScript
+import static org.yatech.jedis.utils.lua.LuaScriptBuilder.*
 
 /**
  * Created on 22/09/15.
@@ -79,7 +78,7 @@ class LuaScriptIntegrationSpec extends BaseIntegrationSpec {
         script.exec(jedis)
 
         then:
-        jedis.zscore('key1', 'mem1') == 1.23
+        jedis.zscore('key1', 'mem1') == 1.23d
     }
 
     def 'zadd and return zscore in script with double value'() {

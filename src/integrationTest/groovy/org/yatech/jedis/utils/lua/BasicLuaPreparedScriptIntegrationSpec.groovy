@@ -2,9 +2,8 @@ package org.yatech.jedis.utils.lua
 
 import org.yatech.jedis.BaseIntegrationSpec
 
-import static org.yatech.jedis.utils.lua.AbstractLuaScriptBuilder.*
 import static org.yatech.jedis.utils.lua.LuaConditions.isNull
-import static org.yatech.jedis.utils.lua.LuaScriptBuilder.startScript
+import static org.yatech.jedis.utils.lua.LuaScriptBuilder.*
 
 /**
  * Created on 22/09/15.
@@ -29,7 +28,7 @@ class BasicLuaPreparedScriptIntegrationSpec extends BaseIntegrationSpec {
         script.exec(jedis)
 
         then:
-        jedis.zscore('key1', 'mem1') == 1.23
+        jedis.zscore('key1', 'mem1') == 1.23d
 
         when:
         script.setKeyArgument('key1', 'key2')
@@ -38,7 +37,7 @@ class BasicLuaPreparedScriptIntegrationSpec extends BaseIntegrationSpec {
         script.exec(jedis)
 
         then:
-        jedis.zscore('key2', 'mem2') == 3.1415
+        jedis.zscore('key2', 'mem2') == 3.1415d
     }
 
     def 'Build prepared script 1'() {
@@ -77,7 +76,7 @@ class BasicLuaPreparedScriptIntegrationSpec extends BaseIntegrationSpec {
 
         then:
         jedis.select(4)
-        jedis.zscore('key2', 'member_a') == 1.23
+        jedis.zscore('key2', 'member_a') == 1.23d
         jedis.hgetAll('key1') == [k1: 'v1', k2: 'v2']
         jedis.select(3)
         !jedis.exists('key1')
@@ -90,7 +89,7 @@ class BasicLuaPreparedScriptIntegrationSpec extends BaseIntegrationSpec {
 
         then:
         jedis.select(4)
-        jedis.zscore('key2', 'member_a') == 1.23
+        jedis.zscore('key2', 'member_a') == 1.23d
         jedis.hgetAll('key1') == [k1: 'v1a', k2: 'v2a']
         jedis.select(3)
         !jedis.exists('key1')
