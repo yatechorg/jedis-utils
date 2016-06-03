@@ -5,6 +5,36 @@
 # jedis-utils
 Utilities for common tasks using [Jedis](https://github.com/xetorthio/jedis) (the java redis client).
 
+* [Jedis Collections](#jedis-collections)
+* [Lua script Builder](#lua-script-builder)
+
+## Jedis Collections
+
+An abstraction of Redis' value types by implementing `java.util` collection interfaces.  
+Includes:  
+
+| Jedis Collection | Corresponding `java.util` Interface | Comments |  
+| --- | --- | --- |  
+| `JedisMap` | `Map` |   |  
+| `JedisList` | `List` | Implements `java.util.Collection`, not `java.util.List`, because of a random access limitation, but gives an ordered collection functionality, close enough to a list |  
+| `JedisSet` | `Set` |   |  
+
+In order to "wrap" a Redis value with the appropriate abstraction, use the `JedisCollections` facade. For example, in order to wrap the hash value in the `myhash` key in database index 2, use:  
+
+```java
+JedisPool jedisPool = getJedisPool();
+JedisCollections jedisCollections = new JedisCollections(jedisPool);
+Map<String, String> myhash = jedisCollections.getMap(2, "myhash");
+```
+
+The method above (using a `JedisPool`) is the preferred way to create a wrapper. In addition, you can use `JedisCollections`' static methods, but then you are responsible for managing the provided `Jedis` instance and keeping it pointing to the correct database index. For example:
+
+```java
+Jedis jedis = getJedis();
+jedis.select(2);
+Set<String> myset = JedisCollections.getSet(jedis, "myset");
+```
+
 ## Lua Script Builder
 A builder facility for building lua scripts to be executed in Redis using Jedis. 
 The builder uses an API similar to the API provided by Jedis. 

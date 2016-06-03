@@ -1,5 +1,6 @@
 package org.yatech.jedis.utils.lua
 
+import org.yatech.jedis.BaseIntegrationSpec
 import redis.clients.jedis.exceptions.JedisDataException
 
 import static org.yatech.jedis.utils.lua.LuaConditions.isNull
