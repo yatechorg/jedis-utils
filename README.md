@@ -36,6 +36,29 @@ jedis.select(2);
 Set<String> myset = JedisCollections.getSet(jedis, "myset");
 ```
 
+### Jedis Keys Scanner
+The `JedisKeysScanner` is an iterator which scans for keys in a redis database. 
+This implementation is based on the `SCAN` redis command. 
+Similar to the collections, a keys scanner can use either a `JedisPool` (preferred) or a `Jedis` instance.
+
+```java
+JedisKeysScanner scanner = new JedisKeysScanner(jedisPool, 0);
+while (scanner.hasNext()) {
+    String key = scanner.next();
+    //do something...
+}
+```
+
+A scan can be limitted by pattern and count using the jedis `ScanParams`.
+ 
+```java
+JedisKeysScanner scanner = new JedisKeysScanner(jedis, new ScanParams().match("my_prefix*"));
+while (scanner.hasNext()) {
+    String key = scanner.next();
+    //Only keys which start with "my_prefix"
+}
+```
+
 ## Lua Script Builder
 A builder facility for building lua scripts to be executed in Redis using Jedis. 
 The builder uses an API similar to the API provided by Jedis. 
