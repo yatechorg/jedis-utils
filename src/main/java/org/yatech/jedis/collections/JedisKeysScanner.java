@@ -20,7 +20,6 @@ import static org.yatech.jedis.collections.Utils.*;
  *     The default batch size is 10, but it can also be configured using the {@link ScanParams} argument.
  *     Please note that setting the batch size is more like a hint rather than a strict definition.
  * </p>
- * <p>
  *     The scan result contains two main details:
  *     <ul>
  *         <li>A result list with the keys in the current batch.
@@ -33,7 +32,6 @@ import static org.yatech.jedis.collections.Utils.*;
  *         <li>A scan result can have an empty list, but still have a next cursor (different from '<code>0</code>').</li>
  *         <li>Although keys are unique in Redis, a key can be returned by <code>SCAN</code> more than once.</li>
  *     </ul>
- * </p>
  * <br>
  * @author Yinon Avraham
  * @see <a href="http://redis.io/commands/scan">SCAN command documentation in redis.io</a>
