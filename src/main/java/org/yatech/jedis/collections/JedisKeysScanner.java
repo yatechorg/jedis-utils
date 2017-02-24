@@ -13,7 +13,7 @@ import static org.yatech.jedis.collections.Utils.*;
 /**
  * Scanner to iterate over keys in a given Redis database.
  * <p>
- *     The iterator is based on Redis's <code>SCAN</code> command. <br/>
+ *     The iterator is based on Redis's <code>SCAN</code> command. <br>
  *     The <code>SCAN</code> command returns a batch of keys and it requires to get the cursor of the batch to read.
  *     Always start with cursor '<code>0</code>'. There is also an option to filter keys by a pattern
  *     (similar to the <code>KEYS</code> command). This can be done using the {@link ScanParams} argument.
@@ -34,7 +34,7 @@ import static org.yatech.jedis.collections.Utils.*;
  *         <li>Although keys are unique in Redis, a key can be returned by <code>SCAN</code> more than once.</li>
  *     </ul>
  * </p>
- * <br/>
+ * <br>
  * @author Yinon Avraham
  * @see <a href="http://redis.io/commands/scan">SCAN command documentation in redis.io</a>
  */
