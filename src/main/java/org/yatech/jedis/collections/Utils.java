@@ -15,13 +15,17 @@ final class Utils {
 
     private Utils() {}
 
-    static void assertNotNull(Object argValue, String argName) {
-        if (argValue == null) {
-            throw new IllegalArgumentException(argName + ": must not be null");
-        }
+    static <T> T checkNotNull(T argValue, String argName) {
+        checkTrue(argValue != null, argName, "must not be null");
+        return argValue;
     }
 
-    static void assertTrue(boolean condition, String argName, String message) {
+    static int checkNotNegative(int argValue, String argName) {
+        checkTrue(argValue >= 0, argName, "must be non-negative");
+        return argValue;
+    }
+
+    static void checkTrue(boolean condition, String argName, String message) {
         if (!condition) {
             throw new IllegalArgumentException(argName + ": " + message);
         }

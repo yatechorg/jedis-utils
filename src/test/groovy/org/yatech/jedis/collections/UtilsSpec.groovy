@@ -2,9 +2,7 @@ package org.yatech.jedis.collections
 
 import spock.lang.Specification
 
-import static org.yatech.jedis.collections.Utils.assertNotNull
-import static org.yatech.jedis.collections.Utils.assertTrue
-import static org.yatech.jedis.collections.Utils.toStringArray
+import static org.yatech.jedis.collections.Utils.*
 
 /**
  * <p>Created on 14/05/16
@@ -23,34 +21,53 @@ class UtilsSpec extends Specification {
         thrown(IllegalAccessException)
     }
 
-    def 'assert true'() {
+    def 'check true'() {
         when:
-        assertTrue(true, 'arg1', 'the error message')
+        checkTrue(true, 'arg1', 'the error message')
 
         then:
         noExceptionThrown()
 
         when:
-        assertTrue(false, 'arg1', 'the error message')
+        checkTrue(false, 'arg1', 'the error message')
 
         then:
         def e = thrown(IllegalArgumentException)
         e.message == "arg1: the error message"
     }
 
-    def 'assert not null'() {
+    def 'check not null'() {
         when:
-        assertNotNull(1, 'arg1')
-
+        def val = checkNotNull(1, 'arg1')
         then:
         noExceptionThrown()
+        val == 1
 
         when:
-        assertNotNull(null, 'arg1')
-
+        checkNotNull(null, 'arg1')
         then:
         def e = thrown(IllegalArgumentException)
         e.message == "arg1: must not be null"
+    }
+
+    def 'check not negative'() {
+        when:
+        def val = checkNotNegative(0, 'arg1')
+        then:
+        noExceptionThrown()
+        val == 0
+
+        when:
+        val = checkNotNegative(1, 'arg1')
+        then:
+        noExceptionThrown()
+        val == 1
+
+        when:
+        checkNotNegative(-1, 'arg1')
+        then:
+        def e = thrown(IllegalArgumentException)
+        e.message == "arg1: must be non-negative"
     }
 
     def 'collection to string array'() {

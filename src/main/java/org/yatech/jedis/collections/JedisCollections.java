@@ -4,7 +4,7 @@ import org.yatech.jedis.collections.JedisSortedSet.ScoreProvider;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
-import static org.yatech.jedis.collections.Utils.assertNotNull;
+import static org.yatech.jedis.collections.Utils.checkNotNull;
 
 /**
  * A facade for creating wrappers for Redis values (hash, list, set, etc.)
@@ -17,8 +17,7 @@ public class JedisCollections {
     private final JedisPool jedisPool;
 
     private JedisCollections(JedisPool jedisPool) {
-        this.jedisPool = jedisPool;
-        assertNotNull(jedisPool, "jedisPool");
+        this.jedisPool = checkNotNull(jedisPool, "jedisPool");
     }
 
     /**

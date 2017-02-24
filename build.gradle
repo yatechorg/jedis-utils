@@ -108,7 +108,7 @@ publishing {
                 def developer = root.appendNode('developers').appendNode('developer')
                 developer.appendNode('id', 'yinonavraham')
                 developer.appendNode('name', 'Yinon Avraham')
-                developer.appendNode('email', 'yinon@yatech.org')
+                developer.appendNode('email', 'yinon at yatech dot org')
             }
         }
     }

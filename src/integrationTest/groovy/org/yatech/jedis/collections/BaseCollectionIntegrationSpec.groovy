@@ -9,13 +9,13 @@ import spock.lang.Shared
  *
  * @author Yinon Avraham
  */
-public abstract class BaseCollectionIntegrationSpec extends BaseIntegrationSpec {
+abstract class BaseCollectionIntegrationSpec extends BaseIntegrationSpec {
 
     @Shared
     protected JedisCollections jedisCollections
 
     @Shared
-    protected JedisPool jedisPool;
+    protected JedisPool jedisPool
 
     def setupSpec() {
         jedisPool = createJedisPool(4)
